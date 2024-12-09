@@ -32,28 +32,33 @@ public class CartItemController {
         return cartItemMapper.toDTO(updatedCartItem);
     }
 
+    @GetMapping("/read")
+    public CartItemDto read(@RequestParam UUID uuid) {
+        return cartItemMapper.toDTO(cartItemService.findCartItemById(uuid));
+    }
+
+    @GetMapping("/read/cart/{cartUuid}/product/{productUuid}")
+    public CartItemDto readByCartUuidAndProductUuid(@PathVariable UUID cartUuid, @PathVariable UUID productUuid) {
+        return cartItemMapper.toDTO(cartItemService.findAllByCartUuidAndProductUuid(cartUuid, productUuid));
+    }
+
+    @GetMapping("/read/all/cart/{cartUuid}")
+    public List<CartItemDto> readAllByCartUuid(@PathVariable UUID cartUuid) {
+        return cartItemService.findAllByCartUuid(cartUuid)
+                .stream()
+                .map(cartItemMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     @DeleteMapping("/delete")
-    public CartItemDto delete(@RequestParam UUID id) {
-        CartItem deletedCartItem = cartItemService.deleteCartItem(id);
+    public CartItemDto delete(@RequestParam UUID uuid) {
+        CartItem deletedCartItem = cartItemService.deleteCartItem(uuid);
         return cartItemMapper.toDTO(deletedCartItem);
     }
 
     @DeleteMapping("/delete/all")
     public List<CartItemDto> deleteAll() {
         return cartItemService.deleteAllCartItems()
-                .stream()
-                .map(cartItemMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/read/cart/product")
-    public CartItemDto readByCartUuidAndProductUuid(@RequestParam UUID cartUuid, @RequestParam UUID productUuid) {
-        return cartItemMapper.toDTO(cartItemService.findAllByCartUuidAndProductUuid(cartUuid, productUuid));
-    }
-
-    @GetMapping("/read/all/cart")
-    public List<CartItemDto> readAllByCartUuid(@RequestParam UUID cartUuid) {
-        return cartItemService.findAllByCartUuid(cartUuid)
                 .stream()
                 .map(cartItemMapper::toDTO)
                 .collect(Collectors.toList());

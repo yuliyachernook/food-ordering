@@ -22,8 +22,8 @@ public class UserController {
         return userMapper.toDTO(insertedUser);
     }
 
-    @GetMapping("/read/login")
-    public UserDto read(@RequestParam String login) {
+    @GetMapping("/read/login/{login}")
+    public UserDto read(@PathVariable String login) {
         User user = userService.findUserByLogin(login);
         return userMapper.toDTO(user);
     }

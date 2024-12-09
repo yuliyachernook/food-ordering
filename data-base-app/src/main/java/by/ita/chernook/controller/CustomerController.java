@@ -39,9 +39,9 @@ public class CustomerController {
         return customerMapper.toDTO(customer);
     }
 
-    @GetMapping("/read/useruuid")
-    public CustomerDto readByUserUuid(@RequestParam UUID userUuid) {
-        Customer customer = customerService.findCustomerByUserUuid(userUuid);
+    @GetMapping("/read/user/{userId}")
+    public CustomerDto readByUserUuid(@PathVariable UUID userId) {
+        Customer customer = customerService.findCustomerByUserUuid(userId);
         return customerMapper.toDTO(customer);
     }
 

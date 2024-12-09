@@ -24,8 +24,8 @@ public class DeliveryAddressController {
         return deliveryAddressMapper.toDTO(insertedDeliveryAddress);
     }
 
-    @DeleteMapping("/delete")
-    public DeliveryAddressDto delete(@RequestParam UUID id) {
+    @DeleteMapping("/delete/{id}")
+    public DeliveryAddressDto delete(@PathVariable UUID id) {
         DeliveryAddress deletedProduct = deliveryAddressService.deleteDeliveryAddress(id);
         return deliveryAddressMapper.toDTO(deletedProduct);
     }

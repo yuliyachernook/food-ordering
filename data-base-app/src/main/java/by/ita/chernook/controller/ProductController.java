@@ -24,9 +24,14 @@ public class ProductController {
 
     @PostMapping("/create")
     public ProductDto create(@RequestBody ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto);
-        Product insertedProduct = productService.insertProduct(product);
+        Product insertedProduct = productService.insertProduct(productMapper.toEntity(productDto));
         return productMapper.toDTO(insertedProduct);
+    }
+
+    @PutMapping("/update")
+    public ProductDto update(@RequestBody ProductDto cosmeticBrandDto) {
+        Product updatedProduct = productService.updateProduct(productMapper.toEntity(cosmeticBrandDto));
+        return productMapper.toDTO(updatedProduct);
     }
 
     @GetMapping("/read")
@@ -43,22 +48,16 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/read/all/category")
-    public List<ProductDto> readAllByCategory(@RequestParam CategoryEnum category) {
+    @GetMapping("/read/all/category/{category}")
+    public List<ProductDto> readAllByCategory(@PathVariable CategoryEnum category) {
         return productService.findProductsByCategory(category)
                 .stream()
                 .map(productMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    @PutMapping("/update")
-    public ProductDto update(@RequestBody ProductDto cosmeticBrandDto) {
-        Product updatedProduct = productService.updateProduct(productMapper.toEntity(cosmeticBrandDto));
-        return productMapper.toDTO(updatedProduct);
-    }
-
-    @DeleteMapping("/delete")
-    public ProductDto delete(@RequestParam UUID id) {
+    @DeleteMapping("/delete/{id}")
+    public ProductDto delete(@PathVariable UUID id) {
         Product deletedProduct = productService.deleteProduct(id);
         return productMapper.toDTO(deletedProduct);
     }

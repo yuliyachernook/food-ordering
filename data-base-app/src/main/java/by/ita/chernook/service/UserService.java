@@ -1,17 +1,12 @@
 package by.ita.chernook.service;
 
-import by.ita.chernook.model.Cart;
-import by.ita.chernook.model.Customer;
 import by.ita.chernook.model.User;
-import by.ita.chernook.repository.CustomerRepository;
 import by.ita.chernook.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
