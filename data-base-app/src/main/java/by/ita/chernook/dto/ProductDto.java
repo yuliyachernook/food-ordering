@@ -21,5 +21,5 @@ public class ProductDto {
     private CategoryEnum category;
     private int discountPercentage;
 
-    //TODO: image
+    private byte[] image;
 }

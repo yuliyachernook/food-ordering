@@ -1,9 +1,13 @@
-package by.ita.chernook.model;
+package by.ita.chernook.dto;
 
-import lombok.*;
+import by.ita.chernook.model.Customer;
+import by.ita.chernook.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -12,24 +16,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Entity
-public class Coupon {
+public class CouponDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    @Column(nullable = false)
     private String name;
     private String description;
-    @Column(nullable = false, unique = true)
     private String code;
     private Double discountPercentage;
     private Double discountAmount;
     private LocalDate expirationDate;
     private Boolean isGlobal;
-
-    @ManyToMany(mappedBy = "coupons", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Customer> customers;
+    private List<CustomerDto> customers;
 }

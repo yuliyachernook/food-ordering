@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class CustomerMapper {
 
     private final DeliveryAddressMapper deliveryAddressMapper;
-    private final OrderMapper orderMapper;
     private final CartMapper cartMapper;
+    private final CouponMapper couponMapper;
 
     public CustomerDto toDTO(Customer customer) {
         return CustomerDto.builder()
@@ -28,11 +28,11 @@ public class CustomerMapper {
                         customer.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toDTO)
                                 .collect(Collectors.toList()) : Collections.emptyList())
-                .orders(customer.getOrders() != null ?
-                        customer.getOrders().stream()
-                                .map(orderMapper::toDTO)
-                                .collect(Collectors.toList()) : Collections.emptyList())
                 .cart(customer.getCart() != null ? cartMapper.toDTO(customer.getCart()) : null)
+                .coupons(customer.getCoupons() != null ?
+                        customer.getCoupons().stream()
+                                .map(couponMapper::toDTO)
+                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 
@@ -48,11 +48,11 @@ public class CustomerMapper {
                         customerDto.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toEntity)
                                 .collect(Collectors.toList()) : Collections.emptyList())
-                .orders(customerDto.getOrders() != null ?
-                        customerDto.getOrders().stream()
-                                .map(orderMapper::toEntity)
-                                .collect(Collectors.toList()) : Collections.emptyList())
                 .cart(customerDto.getCart() != null ? cartMapper.toEntity(customerDto.getCart()) : null)
+                .coupons(customerDto.getCoupons() != null ?
+                        customerDto.getCoupons().stream()
+                                .map(couponMapper::toEntity)
+                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 }

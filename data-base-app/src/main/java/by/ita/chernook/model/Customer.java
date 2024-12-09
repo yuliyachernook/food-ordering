@@ -1,9 +1,6 @@
 package by.ita.chernook.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -37,7 +34,14 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "cartUuid")
     private Cart cart;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "customersCoupons",
+            joinColumns = @JoinColumn(name = "couponUuid", referencedColumnName = "uuid"),
+            inverseJoinColumns = @JoinColumn(name = "customerUuid", referencedColumnName = "uuid")
+    )
+    private List<Coupon> coupons;
 }

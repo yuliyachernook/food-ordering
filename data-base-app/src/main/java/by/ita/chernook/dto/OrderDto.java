@@ -18,7 +18,7 @@ public class OrderDto {
 
     private UUID uuid;
     private CustomerDto customer;
-    private List<OrderItemDto> orderItems = new ArrayList<>();
+    private List<OrderItemDto> orderItems;
     private DeliveryAddressDto deliveryAddress;
     private double totalPrice;
     private String orderStatus;

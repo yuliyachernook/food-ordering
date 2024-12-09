@@ -1,12 +1,8 @@
 package by.ita.chernook.dto;
 
-import by.ita.chernook.model.Customer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import by.ita.chernook.dto.enums.UserRoleEnum;
+import lombok.*;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Data
@@ -19,6 +15,6 @@ public class UserDto {
     private UUID uuid;
     private String login;
     private String password;
+    private UserRoleEnum userRoleEnum;
 
-    private Customer customer;
 }

@@ -1,9 +1,6 @@
 package by.ita.chernook.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -24,13 +22,14 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customerUuid", nullable = false)
+    @ToString.Exclude
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "deliveryAddressUuid", nullable = false)
+    @JoinColumn(name = "deliveryAddressUuid")
     private DeliveryAddress deliveryAddress;
 
     private double totalPrice;

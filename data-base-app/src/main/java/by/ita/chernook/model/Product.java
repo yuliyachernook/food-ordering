@@ -26,7 +26,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
     private int discountPercentage;
+    @Lob
+    private byte[] image;
     private ZonedDateTime creationDateTime;
-
-    //TODO: image
 }

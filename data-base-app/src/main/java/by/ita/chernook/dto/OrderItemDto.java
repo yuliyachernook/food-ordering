@@ -16,5 +16,6 @@ public class OrderItemDto {
     private UUID uuid;
     private OrderDto order;
     private ProductDto product;
+    private Double price;
     private Integer quantity;
 }

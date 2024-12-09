@@ -20,10 +20,27 @@ public class CartController {
     private final CartMapper cartMapper;
 
     @PostMapping("/create")
-    public CartDto create(@RequestBody CartDto productDto) {
-        Cart cart = cartMapper.toEntity(productDto);
+    public CartDto create(@RequestBody CartDto cartDto) {
+        Cart cart = cartMapper.toEntity(cartDto);
         Cart insertedCart = cartService.insertCart(cart);
         return cartMapper.toDTO(insertedCart);
+    }
+
+    @PutMapping("/update")
+    public CartDto update(@RequestBody CartDto cartDto) {
+        Cart updatedCart = cartService.updateCart(cartMapper.toEntity(cartDto));
+        return cartMapper.toDTO(updatedCart);
+    }
+
+    @DeleteMapping("/delete")
+    public CartDto delete(@RequestParam UUID id) {
+        Cart deletedCart = cartService.deleteCart(id);
+        return cartMapper.toDTO(deletedCart);
+    }
+
+    @DeleteMapping("/clean")
+    public void clean(@RequestParam UUID id) {
+        cartService.cleanCart(id);
     }
 
     @GetMapping("/read")
@@ -38,17 +55,5 @@ public class CartController {
                 .stream()
                 .map(cartMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    @PutMapping("/update")
-    public CartDto update(@RequestParam UUID id, @RequestBody CartDto cartDto) {
-        Cart updatedCart = cartService.updateCart(cartMapper.toEntity(cartDto));
-        return cartMapper.toDTO(updatedCart);
-    }
-
-    @DeleteMapping("/delete")
-    public CartDto delete(@RequestParam UUID id) {
-        Cart deletedCart = cartService.deleteCart(id);
-        return cartMapper.toDTO(deletedCart);
     }
 }

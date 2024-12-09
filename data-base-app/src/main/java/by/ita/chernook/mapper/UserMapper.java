@@ -1,8 +1,6 @@
 package by.ita.chernook.mapper;
 
-import by.ita.chernook.dto.ProductDto;
 import by.ita.chernook.dto.UserDto;
-import by.ita.chernook.model.Product;
 import by.ita.chernook.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +16,7 @@ public class UserMapper {
                 .uuid(user.getUuid())
                 .login(user.getLogin())
                 .password(user.getPassword())
+                .userRoleEnum(user.getUserRoleEnum())
                 .build();
     }
 
@@ -26,6 +25,7 @@ public class UserMapper {
                 .uuid(userDto.getUuid())
                 .login(userDto.getLogin())
                 .password(userDto.getPassword())
+                .userRoleEnum(userDto.getUserRoleEnum())
                 .creationDateTime(ZonedDateTime.now())
                 .build();
     }

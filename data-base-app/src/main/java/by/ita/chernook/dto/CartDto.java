@@ -16,6 +16,5 @@ import java.util.UUID;
 public class CartDto {
 
     private UUID uuid;
-    private CustomerDto customer;
     private List<CartItemDto> cartItems = new ArrayList<>();
 }

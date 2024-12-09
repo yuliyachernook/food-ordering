@@ -1,9 +1,8 @@
 package by.ita.chernook.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import by.ita.chernook.dto.enums.UserRoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -23,7 +22,11 @@ public class User {
     private String password;
     @Column(updatable = false)
     private ZonedDateTime creationDateTime;
+    @Enumerated(EnumType.STRING)
+    private UserRoleEnum userRoleEnum;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Customer customer;
 }

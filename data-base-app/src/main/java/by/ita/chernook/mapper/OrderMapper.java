@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class OrderMapper {
 
+    private final CustomerMapper customerMapper;
     private final OrderItemMapper orderItemMapper;
     private final DeliveryAddressMapper deliveryAddressMapper;
 
@@ -24,6 +25,7 @@ public class OrderMapper {
                                 .collect(Collectors.toList()) : Collections.emptyList())
                 .deliveryAddress(order.getDeliveryAddress() != null ?
                         deliveryAddressMapper.toDTO(order.getDeliveryAddress()) : null)
+                .customer(order.getCustomer() != null ? customerMapper.toDTO(order.getCustomer()) : null)
                 .totalPrice(order.getTotalPrice())
                 .orderStatus(order.getOrderStatus())
                 .comment(order.getComment())
@@ -39,6 +41,7 @@ public class OrderMapper {
                                 .collect(Collectors.toList()) : Collections.emptyList())
                 .deliveryAddress(orderDto.getDeliveryAddress() != null ?
                         deliveryAddressMapper.toEntity(orderDto.getDeliveryAddress()) : null)
+                .customer(orderDto.getCustomer() != null ? customerMapper.toEntity(orderDto.getCustomer()) : null)
                 .totalPrice(orderDto.getTotalPrice())
                 .orderStatus(orderDto.getOrderStatus())
                 .comment(orderDto.getComment())

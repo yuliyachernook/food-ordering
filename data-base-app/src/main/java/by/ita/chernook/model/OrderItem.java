@@ -18,16 +18,12 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-
     @ManyToOne
-    @JoinColumn(name = "orderUuid", nullable = false)
+    @JoinColumn(name = "orderUuid")
     private Order order;
-
     @ManyToOne
     @JoinColumn(name = "productUuid", nullable = false)
     private Product product;
-
     private Double price;
-
     private Integer quantity;
 }

@@ -1,9 +1,6 @@
 package by.ita.chernook.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -24,6 +21,7 @@ public class DeliveryAddress {
     private String apartment;
 
     @ManyToOne
-    @JoinColumn(name = "customerUuid", nullable = false)
+    @JoinColumn(name = "customerUuid")
+    @ToString.Exclude
     private Customer customer;
 }

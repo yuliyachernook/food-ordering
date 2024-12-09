@@ -1,34 +1,41 @@
 package by.ita.chernook.service;
 
-//@Service
+import by.ita.chernook.model.Coupon;
+import by.ita.chernook.model.Customer;
+import by.ita.chernook.repository.CouponRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
 public class CouponService {
 
-//    @Autowired
-//    private CouponRepository couponRepository;
-//
-//    public Coupon createGlobalCoupon(Coupon coupon) {
-//        coupon.setGlobal(true);
-//        return couponRepository.save(coupon);
-//    }
-//
-//    public Coupon createPersonalizedCoupon(Long userId, Coupon coupon) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User  not found"));
-//        coupon.setUser (user);
-//        coupon.setGlobal(false);
-//        return couponRepository.save(coupon);
-//    }
-//
-//    public List<Coupon> getAllCoupons() {
-//        return couponRepository.findAll();
-//    }
-//
-//    public List<Coupon> getGlobalCoupons() {
-//        return couponRepository.findByIsGlobal(true);
-//    }
-//
-//    public Coupon getCouponByCode(String code) {
-//        return couponRepository.findByCode(code)
-//                .orElseThrow(() -> new RuntimeException("Coupon not found"));
-//    }
+    private final CouponRepository couponRepository;
+
+    public Coupon createCoupon(Coupon coupon) {
+        return couponRepository.save(coupon);
+    }
+
+    public List<Coupon> findAll() {
+        return couponRepository.findAll();
+    }
+
+    public List<Coupon> getGlobalCoupons() {
+        return couponRepository.findByIsGlobal(true);
+    }
+
+    public Coupon findCouponById(UUID uuid) {
+        return couponRepository.findById(uuid).orElseThrow(() ->
+                new NoSuchElementException(String.format("Coupon with id: %s not found", uuid)));
+
+    }
+
+    public Coupon findCouponByCode(String code) {
+        return couponRepository.findByCode(code).orElseThrow(() ->
+                new NoSuchElementException(String.format("Coupon with code: %s not found", code)));
+    }
 }

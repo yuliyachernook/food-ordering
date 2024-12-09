@@ -9,9 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderItemMapper {
 
+    private final ProductMapper productMapper;
+
     public OrderItemDto toDTO(OrderItem orderItem) {
         return OrderItemDto.builder()
                 .uuid(orderItem.getUuid())
+                .product(productMapper.toDTO(orderItem.getProduct()))
+                .price(orderItem.getPrice())
                 .quantity(orderItem.getQuantity())
                 .build();
     }
@@ -19,6 +23,8 @@ public class OrderItemMapper {
     public OrderItem toEntity(OrderItemDto orderItemDto) {
         return OrderItem.builder()
                 .uuid(orderItemDto.getUuid())
+                .product(productMapper.toEntity(orderItemDto.getProduct()))
+                .price(orderItemDto.getPrice())
                 .quantity(orderItemDto.getQuantity())
                 .build();
     }

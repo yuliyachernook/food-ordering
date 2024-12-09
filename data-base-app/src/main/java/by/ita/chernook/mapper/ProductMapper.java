@@ -19,6 +19,7 @@ public class ProductMapper {
                 .description(product.getDescription())
                 .category(product.getCategory())
                 .discountPercentage(product.getDiscountPercentage())
+                .image(product.getImage())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class ProductMapper {
                 .description(productDto.getDescription())
                 .category(productDto.getCategory())
                 .discountPercentage(productDto.getDiscountPercentage())
+                .image(productDto.getImage())
                 .creationDateTime(ZonedDateTime.now())
                 .build();
     }
