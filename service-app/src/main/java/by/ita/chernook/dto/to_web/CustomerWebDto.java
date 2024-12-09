@@ -1,11 +1,11 @@
-package by.ita.chernook.model;
+package by.ita.chernook.dto.to_web;
 
+import by.ita.chernook.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,18 +14,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class Customer {
+public class CustomerWebDto {
 
     private UUID uuid;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
-    private ZonedDateTime creationDateTime;
 
     private User user;
-    private List<DeliveryAddress> deliveryAddresses;
-    private List<Order> orders = new ArrayList<>();
-    private Cart cart;
-    private List<Coupon> coupons;
+    private List<DeliveryAddressWebDto> deliveryAddresses;
+    private List<OrderWebDto> orders = new ArrayList<>();
+    private CartWebDto cart;
+    private List<CouponWebDto> coupons;
 }

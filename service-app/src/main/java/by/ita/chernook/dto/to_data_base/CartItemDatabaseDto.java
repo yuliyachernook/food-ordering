@@ -1,4 +1,4 @@
-package by.ita.chernook.model;
+package by.ita.chernook.dto.to_data_base;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class CartItem {
+public class CartItemDatabaseDto {
 
     private UUID uuid;
-    private Cart cart;
-    private Product product;
+    private CartDatabaseDto cart;
+    private ProductDatabaseDto product;
     private Integer quantity;
 }

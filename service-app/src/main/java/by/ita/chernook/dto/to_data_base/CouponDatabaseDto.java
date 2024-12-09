@@ -1,6 +1,9 @@
-package by.ita.chernook.model;
+package by.ita.chernook.dto.to_data_base;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class Coupon {
+public class CouponDatabaseDto {
 
     private UUID uuid;
     private String name;

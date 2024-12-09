@@ -1,6 +1,5 @@
-package by.ita.chernook.model;
+package by.ita.chernook.dto.to_data_base;
 
-import by.ita.chernook.dto.enums.CategoryEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,15 +12,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class Product {
+public class MenuItemDatabaseDto {
 
     private UUID uuid;
     private String itemName;
     private double price;
     private String description;
-    private CategoryEnum category;
-    private int discountPercentage;
-    private ZonedDateTime creationDateTime;
 
-    private byte[] image;
+    private Boolean isEdited;
+    private ZonedDateTime creationDateTime;
 }
