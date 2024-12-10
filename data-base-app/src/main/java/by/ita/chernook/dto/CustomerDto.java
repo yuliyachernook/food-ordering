@@ -1,6 +1,5 @@
 package by.ita.chernook.dto;
 
-import by.ita.chernook.model.Coupon;
 import by.ita.chernook.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +26,4 @@ public class CustomerDto {
     private List<DeliveryAddressDto> deliveryAddresses;
     private List<OrderDto> orders = new ArrayList<>();
     private CartDto cart;
-    private List<CouponDto> coupons;
 }

@@ -5,9 +5,6 @@ import by.ita.chernook.model.Product;
 import by.ita.chernook.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,8 +16,16 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Product insertProduct(Product product) {
+        product.setCreationDateTime(ZonedDateTime.now());
+        return productRepository.save(product);
+    }
+
+    public Product updateProduct(Product product) {
+        if (!productRepository.existsById(product.getUuid())) {
+            throw new NoSuchElementException(String.format("Product with UUID: %s not found", product.getUuid()));
+        }
+        return productRepository.save(product);
     }
 
     public Product findProductById(UUID uuid) {
@@ -33,17 +38,8 @@ public class ProductService {
         return productRepository.findByCategory(category);
     }
 
-    public Product insertProduct(Product product) {
-        product.setCreationDateTime(ZonedDateTime.now());
-
-        return productRepository.save(product);
-    }
-
-    public Product updateProduct(Product product) {
-        if (!productRepository.existsById(product.getUuid())) {
-            throw new NoSuchElementException(String.format("Product with UUID: %s not found", product.getUuid()));
-        }
-        return productRepository.save(product);
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public Product deleteProduct(UUID uuid) {

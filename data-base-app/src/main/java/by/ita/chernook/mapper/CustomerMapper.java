@@ -14,7 +14,6 @@ public class CustomerMapper {
 
     private final DeliveryAddressMapper deliveryAddressMapper;
     private final CartMapper cartMapper;
-    private final CouponMapper couponMapper;
 
     public CustomerDto toDTO(Customer customer) {
         return CustomerDto.builder()
@@ -29,10 +28,6 @@ public class CustomerMapper {
                                 .map(deliveryAddressMapper::toDTO)
                                 .collect(Collectors.toList()) : Collections.emptyList())
                 .cart(customer.getCart() != null ? cartMapper.toDTO(customer.getCart()) : null)
-                .coupons(customer.getCoupons() != null ?
-                        customer.getCoupons().stream()
-                                .map(couponMapper::toDTO)
-                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 
@@ -49,10 +44,6 @@ public class CustomerMapper {
                                 .map(deliveryAddressMapper::toEntity)
                                 .collect(Collectors.toList()) : Collections.emptyList())
                 .cart(customerDto.getCart() != null ? cartMapper.toEntity(customerDto.getCart()) : null)
-                .coupons(customerDto.getCoupons() != null ?
-                        customerDto.getCoupons().stream()
-                                .map(couponMapper::toEntity)
-                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 }

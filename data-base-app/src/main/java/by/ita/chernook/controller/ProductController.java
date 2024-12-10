@@ -29,14 +29,14 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ProductDto update(@RequestBody ProductDto cosmeticBrandDto) {
-        Product updatedProduct = productService.updateProduct(productMapper.toEntity(cosmeticBrandDto));
+    public ProductDto update(@RequestBody ProductDto productDto) {
+        Product updatedProduct = productService.updateProduct(productMapper.toEntity(productDto));
         return productMapper.toDTO(updatedProduct);
     }
 
     @GetMapping("/read")
-    public ProductDto read(@RequestParam UUID id) {
-        Product product = productService.findProductById(id);
+    public ProductDto read(@RequestParam UUID uuid) {
+        Product product = productService.findProductById(uuid);
         return productMapper.toDTO(product);
     }
 
@@ -56,9 +56,9 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ProductDto delete(@PathVariable UUID id) {
-        Product deletedProduct = productService.deleteProduct(id);
+    @DeleteMapping("/delete")
+    public ProductDto delete(@RequestParam UUID uuid) {
+        Product deletedProduct = productService.deleteProduct(uuid);
         return productMapper.toDTO(deletedProduct);
     }
 
@@ -75,7 +75,7 @@ public class ProductController {
         Product product = productService.findProductById(id);
         if (product != null && product.getImage() != null) {
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG) // Укажите правильный тип изображения
+                    .contentType(MediaType.IMAGE_JPEG)
                     .body(product.getImage());
         } else {
             return ResponseEntity.notFound().build();

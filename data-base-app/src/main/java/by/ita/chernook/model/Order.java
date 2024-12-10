@@ -1,5 +1,6 @@
 package by.ita.chernook.model;
 
+import by.ita.chernook.dto.enums.OrderStatusEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,8 +22,7 @@ public class Order {
     private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name = "customerUuid", nullable = false)
-    @ToString.Exclude
+    @JoinColumn(name = "customerUuid")
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -33,7 +33,8 @@ public class Order {
     private DeliveryAddress deliveryAddress;
 
     private double totalPrice;
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum orderStatus;
     private String comment;
     private ZonedDateTime creationDateTime;
 }

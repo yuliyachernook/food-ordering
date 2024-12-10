@@ -39,7 +39,7 @@ public class CartItemController {
 
     @GetMapping("/read/cart/{cartUuid}/product/{productUuid}")
     public CartItemDto readByCartUuidAndProductUuid(@PathVariable UUID cartUuid, @PathVariable UUID productUuid) {
-        return cartItemMapper.toDTO(cartItemService.findAllByCartUuidAndProductUuid(cartUuid, productUuid));
+        return cartItemMapper.toDTO(cartItemService.findByCartUuidAndProductUuid(cartUuid, productUuid));
     }
 
     @GetMapping("/read/all/cart/{cartUuid}")
@@ -56,11 +56,8 @@ public class CartItemController {
         return cartItemMapper.toDTO(deletedCartItem);
     }
 
-    @DeleteMapping("/delete/all")
-    public List<CartItemDto> deleteAll() {
-        return cartItemService.deleteAllCartItems()
-                .stream()
-                .map(cartItemMapper::toDTO)
-                .collect(Collectors.toList());
+    @DeleteMapping("/delete/all/cart/{cartUuid}")
+    public void deleteAllByCartUuid(@PathVariable UUID cartUuid) {
+        cartItemService.deleteAllCartItemsByCartUuid(cartUuid);
     }
 }

@@ -37,11 +37,4 @@ public class Customer {
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "cartUuid")
     private Cart cart;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "customersCoupons",
-            joinColumns = @JoinColumn(name = "couponUuid", referencedColumnName = "uuid"),
-            inverseJoinColumns = @JoinColumn(name = "customerUuid", referencedColumnName = "uuid")
-    )
-    private List<Coupon> coupons;
 }

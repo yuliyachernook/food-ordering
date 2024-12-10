@@ -17,8 +17,6 @@ public class CouponMapper {
                 .code(coupon.getCode())
                 .discountPercentage(coupon.getDiscountPercentage())
                 .discountAmount(coupon.getDiscountAmount())
-                .expirationDate(coupon.getExpirationDate())
-                .isGlobal(coupon.getIsGlobal())
                 .build();
     }
 
@@ -30,8 +28,6 @@ public class CouponMapper {
                 .code(couponDto.getCode())
                 .discountPercentage(couponDto.getDiscountPercentage())
                 .discountAmount(couponDto.getDiscountAmount())
-                .expirationDate(couponDto.getExpirationDate())
-                .isGlobal(couponDto.getIsGlobal())
                 .build();
     }
 }

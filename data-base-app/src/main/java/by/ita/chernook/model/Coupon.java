@@ -25,11 +25,4 @@ public class Coupon {
     private String code;
     private Double discountPercentage;
     private Double discountAmount;
-    private LocalDate expirationDate;
-    private Boolean isGlobal;
-
-    @ManyToMany(mappedBy = "coupons", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Customer> customers;
 }

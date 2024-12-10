@@ -7,7 +7,9 @@ import by.ita.chernook.service.DeliveryAddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -24,9 +26,30 @@ public class DeliveryAddressController {
         return deliveryAddressMapper.toDTO(insertedDeliveryAddress);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public DeliveryAddressDto delete(@PathVariable UUID id) {
-        DeliveryAddress deletedProduct = deliveryAddressService.deleteDeliveryAddress(id);
-        return deliveryAddressMapper.toDTO(deletedProduct);
+    @PutMapping("/update")
+    public DeliveryAddressDto update(@RequestBody DeliveryAddressDto deliveryAddressDto) {
+        DeliveryAddress deliveryAddress = deliveryAddressMapper.toEntity(deliveryAddressDto);
+        DeliveryAddress updatedDeliveryAddress = deliveryAddressService.updateDeliveryAddress(deliveryAddress);
+        return deliveryAddressMapper.toDTO(updatedDeliveryAddress);
+    }
+
+    @GetMapping("/read")
+    public DeliveryAddressDto read(@RequestParam UUID uuid) {
+        DeliveryAddress deliveryAddress = deliveryAddressService.findDeliveryAddressById(uuid);
+        return deliveryAddressMapper.toDTO(deliveryAddress);
+    }
+
+    @GetMapping("/read/all")
+    public List<DeliveryAddressDto> readAll() {
+        return deliveryAddressService.findAll()
+                .stream()
+                .map(deliveryAddressMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/delete")
+    public DeliveryAddressDto delete(@RequestParam UUID uuid) {
+        DeliveryAddress deletedDeliveryAddress = deliveryAddressService.deleteDeliveryAddress(uuid);
+        return deliveryAddressMapper.toDTO(deletedDeliveryAddress);
     }
 }

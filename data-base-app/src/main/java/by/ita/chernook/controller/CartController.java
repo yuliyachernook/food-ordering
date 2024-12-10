@@ -50,9 +50,4 @@ public class CartController {
         Cart deletedCart = cartService.deleteCart(uuid);
         return cartMapper.toDTO(deletedCart);
     }
-
-    @DeleteMapping("/clean")
-    public void clean(@RequestParam UUID uuid) {
-        cartService.cleanCart(uuid);
-    }
 }

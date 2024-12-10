@@ -5,6 +5,7 @@ import by.ita.chernook.repository.CartItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -32,9 +33,9 @@ public class CartItemService {
         return cartItem;
     }
 
-    public List<CartItem> deleteAllCartItems() {
-        cartItemRepository.deleteAll();
-        return cartItemRepository.findAll();
+    @Transactional
+    public void deleteAllCartItemsByCartUuid(UUID cartUuid) {
+        cartItemRepository.deleteByCartUuid(cartUuid);
     }
 
     public CartItem findCartItemById(UUID uuid) {
@@ -42,8 +43,9 @@ public class CartItemService {
                 new NoSuchElementException(String.format("CartItem with UUID: %s not found", uuid)));
     }
 
-    public CartItem findAllByCartUuidAndProductUuid(UUID cartUuid, UUID productUuid) {
-        return cartItemRepository.findByCartUuidAndProductUuid(cartUuid, productUuid);
+    public CartItem findByCartUuidAndProductUuid(UUID cartUuid, UUID productUuid) {
+        return cartItemRepository.findByCartUuidAndProductUuid(cartUuid, productUuid).orElseThrow(() ->
+                new NoSuchElementException(String.format("CartItem with cart UUID: %s and product UUID: %s not found", cartUuid, productUuid)));
     }
 
     public List<CartItem> findAllByCartUuid(UUID cartUuid) {

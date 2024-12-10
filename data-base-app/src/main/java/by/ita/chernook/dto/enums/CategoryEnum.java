@@ -7,5 +7,6 @@ public enum CategoryEnum {
     SEAFOOD,
     SALADS,
     DESSERTS,
-    DRINKS
+    DRINKS,
+    OTHERS
 }

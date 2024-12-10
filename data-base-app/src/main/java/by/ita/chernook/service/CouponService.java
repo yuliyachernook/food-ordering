@@ -1,7 +1,6 @@
 package by.ita.chernook.service;
 
 import by.ita.chernook.model.Coupon;
-import by.ita.chernook.model.Customer;
 import by.ita.chernook.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,17 +19,16 @@ public class CouponService {
         return couponRepository.save(coupon);
     }
 
-    public List<Coupon> findAll() {
-        return couponRepository.findAll();
-    }
-
-    public List<Coupon> getGlobalCoupons() {
-        return couponRepository.findByIsGlobal(true);
+    public Coupon updateCoupon(Coupon coupon) {
+        if (!couponRepository.existsById(coupon.getUuid())) {
+            throw new NoSuchElementException(String.format("Coupon with UUID: %s not found", coupon.getUuid()));
+        }
+        return couponRepository.save(coupon);
     }
 
     public Coupon findCouponById(UUID uuid) {
         return couponRepository.findById(uuid).orElseThrow(() ->
-                new NoSuchElementException(String.format("Coupon with id: %s not found", uuid)));
+                new NoSuchElementException(String.format("Coupon with UUID: %s not found", uuid)));
 
     }
 
@@ -38,4 +36,15 @@ public class CouponService {
         return couponRepository.findByCode(code).orElseThrow(() ->
                 new NoSuchElementException(String.format("Coupon with code: %s not found", code)));
     }
+
+    public List<Coupon> findAll() {
+        return couponRepository.findAll();
+    }
+
+    public Coupon deleteCoupon(UUID uuid) {
+        Coupon coupon = findCouponById(uuid);
+        couponRepository.deleteById(uuid);
+        return coupon;
+    }
+
 }

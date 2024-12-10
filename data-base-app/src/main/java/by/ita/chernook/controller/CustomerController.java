@@ -34,14 +34,14 @@ public class CustomerController {
     }
 
     @GetMapping("/read")
-    public CustomerDto read(@RequestParam UUID id) {
-        Customer customer = customerService.findCustomerById(id);
+    public CustomerDto read(@RequestParam UUID uuid) {
+        Customer customer = customerService.findCustomerById(uuid);
         return customerMapper.toDTO(customer);
     }
 
-    @GetMapping("/read/user/{userId}")
-    public CustomerDto readByUserUuid(@PathVariable UUID userId) {
-        Customer customer = customerService.findCustomerByUserUuid(userId);
+    @GetMapping("/read/user/{userUuid}")
+    public CustomerDto readByUserUuid(@PathVariable UUID userUuid) {
+        Customer customer = customerService.findCustomerByUserUuid(userUuid);
         return customerMapper.toDTO(customer);
     }
 
@@ -51,5 +51,11 @@ public class CustomerController {
                 .stream()
                 .map(customerMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/delete")
+    public CustomerDto delete(@RequestParam UUID uuid) {
+        Customer deletedCustomer = customerService.deleteCustomer(uuid);
+        return customerMapper.toDTO(deletedCustomer);
     }
 }
