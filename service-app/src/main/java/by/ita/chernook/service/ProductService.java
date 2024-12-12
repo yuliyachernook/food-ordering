@@ -19,34 +19,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private static final String REQUEST_READ_ALL = "/product/read/all";
-    private static final String REQUEST_READ = "/product/read?";
-    private static final String REQUEST_READ_ALL_BY_CATEGORY = "/product/read/all/category/";
     private static final String REQUEST_CREATE = "/product/create";
     private static final String REQUEST_UPDATE = "/product/update";
-    private static final String REQUEST_DELETE = "/product/delete/";
+    private static final String REQUEST_READ = "/product/read?uuid=%s";
+    private static final String REQUEST_DELETE = "/product/delete?uuid=%s";
+    private static final String REQUEST_READ_ALL = "/product/read/all";
+    private static final String REQUEST_READ_ALL_BY_CATEGORY = "/product/read/all/category/%s";
 
     private final RestTemplate restTemplate;
     private final ProductMapper productMapper;
-
-    public List<Product> findAll() {
-        ResponseEntity<List<ProductDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_ALL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
-        return response.getBody().stream()
-                .map(productMapper::toEntity)
-                .collect(Collectors.toList());
-    }
-
-    public List<Product> findAllByCategory(CategoryEnum category) {
-        ResponseEntity<List<ProductDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_ALL_BY_CATEGORY + category, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
-        return response.getBody().stream()
-                .map(productMapper::toEntity)
-                .collect(Collectors.toList());
-    }
-
-    public Product findProductById(UUID uuid) {
-        return productMapper.toEntity(restTemplate.getForObject(REQUEST_READ + "id=" + uuid, ProductDatabaseDto.class));
-    }
-
 
     public Product createProduct(Product product) {
         ProductDatabaseDto productDatabaseDto = productMapper.toDatabaseDTO(product);
@@ -60,6 +41,24 @@ public class ProductService {
     }
 
     public void deleteProduct(UUID uuid) {
-        restTemplate.delete(REQUEST_DELETE  + uuid);
+        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
+    }
+
+    public List<Product> findAll() {
+        ResponseEntity<List<ProductDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_ALL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
+        return response.getBody().stream()
+                .map(productMapper::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> findAllByCategory(CategoryEnum category) {
+        ResponseEntity<List<ProductDatabaseDto>> response = restTemplate.exchange(String.format(REQUEST_READ_ALL_BY_CATEGORY, category), HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
+        return response.getBody().stream()
+                .map(productMapper::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public Product findProductById(UUID uuid) {
+        return productMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), ProductDatabaseDto.class));
     }
 }

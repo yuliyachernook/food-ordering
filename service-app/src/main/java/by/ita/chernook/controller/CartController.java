@@ -33,9 +33,4 @@ public class CartController {
     public void delete(@RequestParam UUID uuid) {
         cartService.deleteCart(uuid);
     }
-
-    @DeleteMapping("/clean")
-    public void clean(@RequestParam UUID uuid) {
-        cartService.cleanCart(uuid);
-    }
 }

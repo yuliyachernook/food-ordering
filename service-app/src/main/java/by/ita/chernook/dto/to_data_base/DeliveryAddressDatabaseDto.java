@@ -17,7 +17,7 @@ public class DeliveryAddressDatabaseDto {
     private String city;
     private String street;
     private String house;
-    private String apartment;
+    private Integer apartment;
 
     private CustomerDatabaseDto customer;
 }

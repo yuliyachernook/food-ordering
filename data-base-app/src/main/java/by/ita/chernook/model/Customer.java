@@ -23,6 +23,7 @@ public class Customer {
     private String phoneNumber;
     private String email;
     private ZonedDateTime creationDateTime;
+    private double balance;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "userUuid")

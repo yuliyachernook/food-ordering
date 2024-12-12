@@ -1,9 +1,8 @@
 package by.ita.chernook.model;
 
+import by.ita.chernook.dto.enums.CouponTypeEnum;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,8 +15,7 @@ public class Coupon {
     private String name;
     private String description;
     private String code;
-    private Double discountPercentage;
-    private Double discountAmount;
-    private LocalDate expirationDate;
-    private Boolean isGlobal;
+    private CouponTypeEnum couponType;
+    private int discount;
+    private int availableUses;
 }

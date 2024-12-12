@@ -1,5 +1,6 @@
 package by.ita.chernook.model;
 
+import by.ita.chernook.dto.enums.OrderStatusEnum;
 import lombok.*;
 
 import java.time.ZonedDateTime;
@@ -14,15 +15,11 @@ import java.util.UUID;
 public class Order {
 
     private UUID uuid;
-    @ToString.Exclude
     private Customer customer;
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    @ToString.Exclude
     private DeliveryAddress deliveryAddress;
-
     private double totalPrice;
-    private String orderStatus;
+    private OrderStatusEnum orderStatus;
     private String comment;
     private ZonedDateTime creationDateTime;
 }

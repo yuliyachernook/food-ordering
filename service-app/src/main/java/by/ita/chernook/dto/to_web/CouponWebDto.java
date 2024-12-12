@@ -1,5 +1,6 @@
 package by.ita.chernook.dto.to_web;
 
+import by.ita.chernook.dto.enums.CouponTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +20,7 @@ public class CouponWebDto {
     private String name;
     private String description;
     private String code;
-    private Double discountPercentage;
-    private Double discountAmount;
-    private LocalDate expirationDate;
-    private Boolean isGlobal;
+    private CouponTypeEnum couponType;
+    private int discount;
+    private int availableUses;
 }

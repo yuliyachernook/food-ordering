@@ -21,10 +21,10 @@ public class CustomerWebDto {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private double balance;
 
     private User user;
     private List<DeliveryAddressWebDto> deliveryAddresses;
     private List<OrderWebDto> orders = new ArrayList<>();
     private CartWebDto cart;
-    private List<CouponWebDto> coupons;
 }

@@ -1,40 +1,63 @@
 package by.ita.chernook.service;
 
 import by.ita.chernook.dto.to_data_base.CouponDatabaseDto;
-import by.ita.chernook.dto.to_data_base.CustomerDatabaseDto;
 import by.ita.chernook.mapper.CouponMapper;
-import by.ita.chernook.mapper.CustomerMapper;
 import by.ita.chernook.model.Coupon;
-import by.ita.chernook.model.Customer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.UUID;
-
-import static by.ita.chernook.service.CustomerService.REQUEST_READ_BY_ID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CouponService {
 
     private static final String REQUEST_CREATE = "/coupon/create";
-    private static final String REQUEST_CUSTOMER_UPDATE = "/customer/update";
-
+    private static final String REQUEST_UPDATE = "/coupon/update";
+    private static final String REQUEST_READ_BY_CODE = "/coupon/read/code?code=%s";
+    private static final String REQUEST_READ_GLOBAL = "/coupon/read/all";
 
     private final RestTemplate restTemplate;
     private final CouponMapper couponMapper;
-    private final CustomerMapper customerMapper;
 
-    public Coupon createCoupon(Coupon coupon) {
-        CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
-        return couponMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, couponDatabaseDto, CouponDatabaseDto.class));
+    public Coupon createCoupon(Coupon coupon)  {
+            try {
+                Coupon existingCoupon = findCouponByCode(coupon.getCode());
+                return null;
+            } catch (Exception e ) {
+                CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
+                return couponMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, couponDatabaseDto, CouponDatabaseDto.class));
+            }
     }
 
-    public Customer addCouponToCustomer(UUID id, Coupon coupon) {
-        Coupon created = createCoupon(coupon);
-        Customer customer = customerMapper.toEntity(restTemplate.getForObject(REQUEST_READ_BY_ID, CustomerDatabaseDto.class, id));
-        customer.getCoupons().add(created);
-        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_CUSTOMER_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
+    public Coupon applyCoupon(String code)  {
+        Coupon coupon = findCouponByCode(code);
+        int couponAvailableUses = coupon.getAvailableUses();
+        if (couponAvailableUses > 0) {
+            coupon.setAvailableUses(couponAvailableUses - 1);
+            CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
+            restTemplate.put(REQUEST_UPDATE, couponDatabaseDto, CouponDatabaseDto.class);
+            return coupon;
+        } else return null;
+    }
+
+    public Coupon findCouponByCode(String code) {
+        String url = String.format(REQUEST_READ_BY_CODE, code);
+        CouponDatabaseDto couponDatabaseDto = restTemplate.getForObject(url, CouponDatabaseDto.class);
+        if (couponDatabaseDto != null) {
+            return couponMapper.toEntity(couponDatabaseDto);
+        } else return null;
+    }
+
+    public List<Coupon> findAllGlobalCoupons() {
+        ResponseEntity<List<CouponDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_GLOBAL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
+        return response.getBody().stream()
+                .map(couponMapper::toEntity)
+                .collect(Collectors.toList());
     }
 }

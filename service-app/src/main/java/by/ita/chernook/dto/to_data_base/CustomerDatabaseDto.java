@@ -22,6 +22,7 @@ public class CustomerDatabaseDto {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private double balance;
 
     private User user;
     private List<DeliveryAddressDatabaseDto> deliveryAddresses;

@@ -21,6 +21,7 @@ public class CustomerDto {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private double balance;
 
     private User user;
     private List<DeliveryAddressDto> deliveryAddresses;

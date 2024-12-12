@@ -15,8 +15,9 @@ public class CouponMapper {
                 .name(coupon.getName())
                 .description(coupon.getDescription())
                 .code(coupon.getCode())
-                .discountPercentage(coupon.getDiscountPercentage())
-                .discountAmount(coupon.getDiscountAmount())
+                .couponType(coupon.getCouponType())
+                .discount(coupon.getDiscount())
+                .availableUses(coupon.getAvailableUses())
                 .build();
     }
 
@@ -26,8 +27,9 @@ public class CouponMapper {
                 .name(couponDto.getName())
                 .description(couponDto.getDescription())
                 .code(couponDto.getCode())
-                .discountPercentage(couponDto.getDiscountPercentage())
-                .discountAmount(couponDto.getDiscountAmount())
+                .couponType(couponDto.getCouponType())
+                .discount(couponDto.getDiscount())
+                .availableUses(couponDto.getAvailableUses())
                 .build();
     }
 }

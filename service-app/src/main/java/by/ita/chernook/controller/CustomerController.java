@@ -2,7 +2,6 @@ package by.ita.chernook.controller;
 
 import by.ita.chernook.dto.to_web.CustomerWebDto;
 import by.ita.chernook.dto.to_web.DeliveryAddressWebDto;
-import by.ita.chernook.dto.to_web.ProductWebDto;
 import by.ita.chernook.mapper.CustomerMapper;
 import by.ita.chernook.mapper.DeliveryAddressMapper;
 import by.ita.chernook.model.Customer;
@@ -32,22 +31,16 @@ public class CustomerController {
     }
 
     @GetMapping("/read")
-    public CustomerWebDto read(@RequestParam UUID id) {
-        Customer customer = customerService.findCustomerById(id);
+    public CustomerWebDto read(@RequestParam UUID uuid) {
+        Customer customer = customerService.findCustomerById(uuid);
         return customerMapper.toWebDTO(customer);
     }
 
     @PostMapping("/add/address")
-    public CustomerWebDto addAddress(@RequestParam UUID id, @RequestBody DeliveryAddressWebDto deliveryAddressWebDto) {
-        Customer insertedCustomer = customerService.addAddress(id, deliveryAddressMapper.toEntity(deliveryAddressWebDto));
+    public CustomerWebDto addAddress(@RequestParam UUID uuid, @RequestBody DeliveryAddressWebDto deliveryAddressWebDto) {
+        Customer insertedCustomer = customerService.addAddress(uuid, deliveryAddressMapper.toEntity(deliveryAddressWebDto));
         return customerMapper.toWebDTO(insertedCustomer);
     }
-
-    @DeleteMapping("/delete/address")
-    public void deleteAddress(@RequestParam UUID id) {
-        customerService.deleteAddress(id);
-    }
-
 
     @GetMapping("/read/user/{userUuid}")
     public CustomerWebDto readByUserUuid(@PathVariable UUID userUuid) {

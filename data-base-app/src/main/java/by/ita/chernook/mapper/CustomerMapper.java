@@ -22,6 +22,7 @@ public class CustomerMapper {
                 .lastName(customer.getLastName())
                 .phoneNumber(customer.getPhoneNumber())
                 .email(customer.getEmail())
+                .balance(customer.getBalance())
                 .user(customer.getUser() != null ? customer.getUser() : null)
                 .deliveryAddresses(customer.getDeliveryAddresses() != null ?
                         customer.getDeliveryAddresses().stream()
@@ -38,6 +39,7 @@ public class CustomerMapper {
                 .lastName(customerDto.getLastName())
                 .phoneNumber(customerDto.getPhoneNumber())
                 .email(customerDto.getEmail())
+                .balance(customerDto.getBalance())
                 .user(customerDto.getUser() != null ? customerDto.getUser() : null)
                 .deliveryAddresses(customerDto.getDeliveryAddresses() != null ?
                         customerDto.getDeliveryAddresses().stream()

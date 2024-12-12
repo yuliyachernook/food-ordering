@@ -1,7 +1,6 @@
 package by.ita.chernook.controller;
 
 import by.ita.chernook.dto.enums.CategoryEnum;
-import by.ita.chernook.dto.to_data_base.ProductDatabaseDto;
 import by.ita.chernook.dto.to_web.ProductWebDto;
 import by.ita.chernook.mapper.ProductMapper;
 import by.ita.chernook.model.Product;
@@ -36,8 +35,8 @@ public class ProductController {
     }
 
     @GetMapping("/read")
-    public ProductWebDto read(@RequestParam UUID id) {
-        Product product = productService.findProductById(id);
+    public ProductWebDto read(@RequestParam UUID uuid) {
+        Product product = productService.findProductById(uuid);
         return productMapper.toWebDTO(product);
     }
 
@@ -58,15 +57,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam UUID id) {
-        productService.deleteProduct(id);
+    public void delete(@RequestParam UUID uuid) {
+        productService.deleteProduct(uuid);
     }
-//
-//    @DeleteMapping("/delete/all")
-//    public List<ProductWebDto> deleteAll() {
-//        return productService.deleteAllProducts()
-//                .stream()
-//                .map(productMapper::toDatabaseDTO)
-//                .collect(Collectors.toList());
-//    }
 }

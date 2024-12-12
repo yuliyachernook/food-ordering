@@ -17,10 +17,9 @@ public class CouponMapper {
                 .name(coupon.getName())
                 .description(coupon.getDescription())
                 .code(coupon.getCode())
-                .discountPercentage(coupon.getDiscountPercentage())
-                .discountAmount(coupon.getDiscountAmount())
-                .expirationDate(coupon.getExpirationDate())
-                .isGlobal(coupon.getIsGlobal())
+                .couponType(coupon.getCouponType())
+                .discount(coupon.getDiscount())
+                .availableUses(coupon.getAvailableUses())
                 .build();
     }
 
@@ -30,10 +29,9 @@ public class CouponMapper {
                 .name(coupon.getName())
                 .description(coupon.getDescription())
                 .code(coupon.getCode())
-                .discountPercentage(coupon.getDiscountPercentage())
-                .discountAmount(coupon.getDiscountAmount())
-                .expirationDate(coupon.getExpirationDate())
-                .isGlobal(coupon.getIsGlobal())
+                .couponType(coupon.getCouponType())
+                .discount(coupon.getDiscount())
+                .availableUses(coupon.getAvailableUses())
                 .build();
     }
 
@@ -43,10 +41,9 @@ public class CouponMapper {
                 .name(couponWebDto.getName())
                 .description(couponWebDto.getDescription())
                 .code(couponWebDto.getCode())
-                .discountPercentage(couponWebDto.getDiscountPercentage())
-                .discountAmount(couponWebDto.getDiscountAmount())
-                .expirationDate(couponWebDto.getExpirationDate())
-                .isGlobal(couponWebDto.getIsGlobal())
+                .couponType(couponWebDto.getCouponType())
+                .discount(couponWebDto.getDiscount())
+                .availableUses(couponWebDto.getAvailableUses())
                 .build();
     }
 
@@ -56,10 +53,9 @@ public class CouponMapper {
                 .name(couponDatabaseDto.getName())
                 .description(couponDatabaseDto.getDescription())
                 .code(couponDatabaseDto.getCode())
-                .discountPercentage(couponDatabaseDto.getDiscountPercentage())
-                .discountAmount(couponDatabaseDto.getDiscountAmount())
-                .expirationDate(couponDatabaseDto.getExpirationDate())
-                .isGlobal(couponDatabaseDto.getIsGlobal())
+                .couponType(couponDatabaseDto.getCouponType())
+                .discount(couponDatabaseDto.getDiscount())
+                .availableUses(couponDatabaseDto.getAvailableUses())
                 .build();
     }
 }

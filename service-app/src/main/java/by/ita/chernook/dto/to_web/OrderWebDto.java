@@ -1,5 +1,6 @@
 package by.ita.chernook.dto.to_web;
 
+import by.ita.chernook.dto.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class OrderWebDto {
     private List<OrderItemWebDto> orderItems;
     private DeliveryAddressWebDto deliveryAddress;
     private double totalPrice;
-    private String orderStatus;
+    private OrderStatusEnum orderStatus;
     private ZonedDateTime creationDateTime;
     private String comment;
 }

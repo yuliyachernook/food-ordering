@@ -1,5 +1,6 @@
 package by.ita.chernook.model;
 
+import by.ita.chernook.dto.enums.CouponTypeEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,8 @@ public class Coupon {
     private String description;
     @Column(nullable = false, unique = true)
     private String code;
-    private Double discountPercentage;
-    private Double discountAmount;
+    @Enumerated(EnumType.STRING)
+    private CouponTypeEnum couponType;
+    private int discount;
+    private int availableUses;
 }

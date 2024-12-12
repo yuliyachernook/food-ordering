@@ -22,6 +22,7 @@ public class Customer {
     private String phoneNumber;
     private String email;
     private ZonedDateTime creationDateTime;
+    private double balance;
 
     private User user;
     private List<DeliveryAddress> deliveryAddresses;
