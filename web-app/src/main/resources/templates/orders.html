@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+    <style>
+        body {
+           font-family: Arial, sans-serif;
+           margin: 20px;
+           background-color: #f4f4f4;
+       }
+       h1 {
+           text-align: center;
+           color: #333;
+       }
+       table {
+           width: 100%;
+           border-collapse: collapse;
+           margin: 20px 0;
+           background-color: #fff;
+       }
+       th, td {
+           padding: 12px;
+           text-align: left;
+           border-bottom: 1px solid #ddd;
+       }
+       th {
+           background-color: #6492b4;
+           color: white;
+       }
+       tr:hover {
+           background-color: #f1f1f1;
+       }
+         .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;width: 120px;
+            text-align: center;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background-color: #007BFF;
+        }
+        .btn-danger {
+            background-color: #DC3545;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .date {
+            width: 20%;
+        }
+        .price {
+            width: 10%;
+        }
+        .comment {
+            width: 40%;
+        }
+        .status {
+            width: 20%;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th class="date">Время создания</th>
+        <th class="price">Стоимость</th>
+        <th class="comment">Комментарий</th>
+        <th class="status">Статус</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <h1>Все заказы</h1>
+
+    <tr th:if="${orders.empty}">
+        <td colspan="2">Нет заказов</td>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <span hidden th:text="${order.uuid}"></span>
+        <td><span th:text="${#dates.format(order.creationDateTime, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+        <td><span th:text="${order.totalPrice}"></span></td>
+        <td><span th:text="${order.comment}"></span></td>
+        <td><span th:text="${order.orderStatus}"></span></td>
+        <td><a th:href="@{/admin/orders/update(uuid=${order.uuid})}" class="btn btn-primary">Редактировать</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/admin/}">На главную страницу</a>
+</body>
+</html>

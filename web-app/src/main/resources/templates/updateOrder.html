@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование заказа</title>
+</head>
+<body>
+<div class="container">
+    <h1>Редактирование заказа</h1>
+    <form th:action="@{/admin/orders/update/(id=${order.uuid})}" th:method="POST" th:object="${order}">
+        <input type="hidden" th:field="${order.uuid}"/>
+
+        <div class="form-group">
+            <label for="orderStatus">Статус заказа:</label>
+            <select id="orderStatus" th:field="*{orderStatus}">
+                <option th:each="status : ${T(by.ita.chernook.dto.enums.OrderStatusEnum).values()}"
+                        th:value="${status}"
+                        th:text="${status}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="comment">Комментарий:</label>
+            <textarea id="comment" th:field="*{comment}" rows="7"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="totalPrice">Общая цена:</label>
+            <input type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <button type="submit">Сохранить изменения</button>
+        </div>
+    </form>
+    <div class="form-group">
+        <a href="/orders">Назад к списку заказов</a>
+    </div>
+</div>
+</body>
+</html>

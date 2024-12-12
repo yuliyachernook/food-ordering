@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Main</title>
+</head>
+<body>
+    <h1>Страница администратора</h1>
+
+    <a th:href="@{/admin/products/}">Товары</a><br>
+    <a th:href="@{/admin/products/create}">Добавить товар</a><br><br>
+
+    <a th:href="@{/admin/coupons/}">Купоны</a><br>
+    <a th:href="@{/admin/coupons/create}">Добавить купон</a><br><br>
+
+    <a th:href="@{/admin/orders/}">Заказы</a><br>
+    <br>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Выйти</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.itemName}">Product Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .product-details {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .product-image {
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+        .product-name {
+            font-size: 2em;
+            margin: 0;
+        }
+        .product-price {
+            font-size: 1.5em;
+            color: #28a745;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .product-description {
+            margin: 20px 0;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="product-details">
+    <img th:src="@{${'/' + product.uuid + '/image'}}" class="product-image" alt="Product Image"/>
+    <h1 class="product-name" th:text="${product.itemName}"></h1>
+    <div class="product-price">
+        <span th:if="${product.discountPercentage > 0}">
+            <span class="old-price" th:text="${product.price} + ' руб.'"></span>
+            <span th:text="${product.price - (product.price * product.discountPercentage / 100)} + ' руб.'"></span>
+        </span>
+        <span th:if="${product.discountPercentage == 0}" th:text="${product.price} + ' руб.'"></span>
+    </div>
+    <div class="product-description" th:text="${product.description}"></div>
+    <div class="product-category" th:text="'Категория: ' + ${product.category}"></div>
+    <a class="back-button" th:href="@{/}">Назад к списку продуктов</a>
+</div>
+
+</body>
+</html>

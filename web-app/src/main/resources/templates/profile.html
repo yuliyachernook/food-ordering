@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #f76531;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        button:hover {
+            background-color: #CB542A;
+        }
+
+         .coupon-list {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .coupon {
+            background-color: #ffffff;
+            border: 1px solid #d1d1d1;
+            border-radius: 10px;
+            margin: 10px;
+            width: 250px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .coupon:hover {
+            transform: scale(1.02);
+        }
+
+        .coupon-header {
+            background-color:#D8D2CF;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #d1d1d1;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .coupon-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .coupon-body {
+            padding: 20px;
+        }
+
+        .coupon-code {
+            background-color: #f76531;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .coupon-body p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .address-list, .order-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .address-list li, .order-list li{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .card {
+            margin-top: 20px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary {
+            background-color: #817C79;
+            color: #810E16;
+        }
+        .btn-secondary:hover {
+            background-color: #6A6868;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            var form = document.getElementById("addressForm");
+            var button = document.getElementById("addressButton");
+            if (form.style.display === "none") {
+                form.style.display = "block"; // Показываем форму
+                button.style.display = "none"; // Скрываем кнопку
+            } else {
+                form.style.display = "none"; // Скрываем форму
+                button.style.display = "block"; // Показываем кнопку
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Личный кабинет</h1>
+
+    <div>
+        <h2>Информация о пользователе</h2>
+        <p><strong>Имя:</strong> <span th:text="${customer.firstName}"></span></p>
+        <p><strong>Фамилия:</strong> <span th:text="${customer.lastName}"></span></p>
+        <p><strong> Телефон:</strong> <span th:text="${customer.phoneNumber}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
+        <p><strong>Ваш баланс:</strong> <span th:text="${customer.balance}"></span></p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2>Мои адреса доставки</h2>
+            <ul class="address-list">
+                <span th:if="${#lists.isEmpty(customer.deliveryAddresses)}">Нет адресов доставки</span>
+                <li th:each="address : ${customer.deliveryAddresses}">
+                    <span th:text="${address.city} + ', ' + ${address.street} + ', ' + ${address.house} + (address.apartment != null ? ', кв. ' + ${address.apartment} : '')"></span>
+                    <form th:action="@{/customer/delete/delivery/address(deliveryAddressId=${address.uuid})}" th:method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </li>
+            </ul>
+            <button id="addressButton" class="btn btn-custom" onclick="toggleForm()">Добавить адрес</button>
+            <form id="addressForm" th:action="@{/customer/add/delivery/address}" th:method="post" style="display: none;">
+                <div class="form-group">
+                    <label for="city">Город:</label>
+                    <input type="text" id="city" class="form-control" th:field="${address.city}" required>
+                </div>
+                <div class="form-group">
+                    <label for="street">Улица:</label>
+                    <input type="text" id="street" class="form-control" th:field="${address.street}" required>
+                </div>
+                <div class="form-group">
+                    <label for="house">Дом:</label>
+                    <input type="text" id="house" class="form-control" th:field="${address.house}" required>
+                </div>
+                <div class="form-group">
+                    <label for="apartment">Квартира:</label>
+                    <input type="text" id="apartment" class="form-control" th:field="${address.apartment}">
+                </div>
+                <button type="submit">Добавить адрес</button>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <h2 th:if="${not orders.empty}">Мои заказы</h2>
+        <ul class="order-list">
+            <span th:if="${#lists.isEmpty(orders)}">Нет заказов</span>
+            <li th:each="order : ${orders}">
+                <span th:text="${order.totalPrice}"></span>
+                <span th:text="${order.creationDateTime}"></span>
+                <span th:text="${order.orderStatus.name}"></span>
+<!--                <form th:action="@{/order/details(orderId=${order.uuid})}" th:method="get" style="display:inline;">-->
+<!--                    <button type="submit" class="btn btn-custom btn-sm">Детали</button>-->
+<!--                </form>-->
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <h2>Купоны</h2>
+        <span th:if="${#lists.isEmpty(coupons)}">На данный момент нет актуальных купонов. Следите за обновлениями :)</span>
+        <div class="coupon-list">
+            <div th:each="coupon : ${coupons}" class="coupon">
+                <div class="coupon-header">
+                    <h3 th:text="${coupon.name}"></h3>
+                </div>
+                <div class="coupon-body">
+                    <p th:text="${coupon.description}"></p>
+                    <p><strong>КОД:</strong> <span class="coupon-code" th:text="${coupon.code}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form th:action="@{/logout}" th:method="post" style="display: inline;">
+        <button type="submit" class="btn-secondary">Выйти</button>
+    </form>
+</div>
+</body>
+</html>

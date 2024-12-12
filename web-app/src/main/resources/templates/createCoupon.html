@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавить купон</title>
+    <link rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Добавить купон</h1>
+    <form th:action="@{/admin/coupons/create}" id="couponForm" th:object="${coupon}" th:method="post">
+        <div class="form-group">
+            <label for="name">Название купона:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Описание купона:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="code">Код купона:</label>
+            <input type="text" id="code" name="code" required>
+        </div>
+        <div class="form-group">
+            <label for="coupon-type">Тип купона:</label>
+            <select id="coupon-type" name="couponType" required>
+                <option value="PERCENT">Процентная скидка</option>
+                <option value="FIXED">Фиксированная скидка</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="discount">Размер скидки:</label>
+            <input type="number" id="discount" name="discount" required>
+        </div>
+        <div class="form-group">
+            <label for="available-uses">Количество использований:</label>
+            <input type="number" id="available-uses" name="availableUses" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить купон</button>
+    </form>
+</div>
+
+<script>
+</script>
+</body>
+</html>

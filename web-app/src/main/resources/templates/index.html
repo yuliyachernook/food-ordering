@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.header {
+    background-color: #f76531;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.user-info a:hover {
+    text-decoration: underline;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #e1e3e5;
+    color: #43474c;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.category-menu {
+    margin-top: 20px;
+}
+
+.category-item {
+    margin: 10px 0;
+}
+
+.category-item a {
+    color: #f76531;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.category-item a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 330px;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden
+}
+
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-title {
+    font-size: 1.5em;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.product-description {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.quantity-input {
+    width: 170px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-to-cart {
+    background-color: transparent;
+    border: none;
+    color: #f76531;
+    font-size: 1em;
+    cursor: pointer;
+    transition: color 0.2s;
+    width:100%;
+    font-weight: bold;
+}
+
+button.add-to-cart.in-cart {
+    margin-top: 5px;
+}
+
+.add-to-cart:hover {
+    color: #CB542A;
+}
+
+.product-price {
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 10px;
+}
+
+.new-price {
+    color: #f76531;
+    font-weight: bold;
+}
+
+.price {
+    color: black;
+    font-weight: bold;
+}
+
+.quantity-selector {
+    align-items: center;
+    width: 100%;
+}
+
+.quantity-input {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+}
+
+.cart-button {
+    background-color: #f76531;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+
+.cart-button:hover {
+    background-color: #CB542A;
+}
+
+.cart-button. in-cart {
+    background-color: #6c757d;
+}
+
+.cart-button. in-cart:hover {
+    background-color: #CB542A;
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        width: 100%;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+}
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Заказать еду</h1>
+    <div class="user-info">
+        <a th:href="@{/customer/profile}" sec:authorize="hasAuthority('CUSTOMER')"  sec:authentication="name"></a>
+        <a sec:authorize="isAnonymous()" href="/login">Войти</a>
+        <a th:href="@{/cart}">Корзина</a>
+    </div>
+</div>
+<div class="sidebar">
+    <h2>Категории</h2>
+    <div class="category-menu">
+        <div class="category-item">
+            <a th:href="@{/}">Все продукты</a>
+        </div>
+        <div class="category-item" th:each="category : ${T(by.ita.chernook.dto.enums.CategoryEnum).values()}">
+            <a th:href="@{/(category=${category})}" th:text="${category.name}"></a>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div th:if="${products.empty}">
+        <p>Нет доступных товаров</p>
+    </div>
+<div class="product-container">
+    <div th:each="product : ${products}" class="product-card">
+        <a th:href="@{/product(uuid=${product.uuid})}" style="text-decoration: none; color: inherit;">
+        <div class="product-name" th:text="${product.itemName}"></div>
+        <div class="product-price">
+            <span th:if="${product.discountPercentage > 0}">
+                <span class="old-price" th:text="${product.price} + ' руб.'"></span>
+                <span class="new-price" th:text="${product.price - (product.price * product.discountPercentage / 100)} + ' руб.'"></span>
+            </span>
+            <span class="price" th:if="${product.discountPercentage == 0}" th:text="${product.price} + ' руб.'"></span>
+        </div>
+        <img th:src="@{${'/' + product.uuid + '/image'}}" class='product-image' alt="Product Image"/>
+
+            <div class="product-footer">
+        <div class="quantity-selector">
+        <div th:if="${productQuantitiesInCart != null && productQuantitiesInCart.containsKey(product.uuid)}" class="cart-item-quantity">
+            <form th:action="@{/cart/update}" th:method="post" style="display:inline;">
+                <button type="submit" th:onclick="changeQuantity('minus', '[[${product.uuid}]]')" class="quantity-button">-</button>
+                <input type="hidden" th:name="productId" th:value="${product.uuid}" />
+                <input type="hidden" th:name="redirectPage" th:value="index" />
+                <input class="quantity-input" type="number" th:name="quantity" th:value="${productQuantitiesInCart.get(product.uuid)}" min="1" th:id="'input' + ${product.uuid}" readonly />
+                <button type="submit" th:onclick="changeQuantity('plus', '[[${product.uuid}]]')" class="quantity-button">+</button>
+            </form>
+        </div>
+        <form th:action="@{/cart/add-cart-item}" id="add-to-cart-form" th:method="post" class="quantity-selector">
+            <input type="hidden" th:name="productId" th:value="${product.uuid}" />
+            <div th:if="${productQuantitiesInCart == null || !productQuantitiesInCart.containsKey(product.uuid)}" class="cart-item-quantity">
+                <input class="quantity-input" type="hidden" th:name="quantity" value="1" min="1" readonly data-item-id="[[${product.uuid}]]" />
+            </div>
+                <button type="submit" class="add-to-cart"
+                        th:classappend="${productQuantitiesInCart != null && productQuantitiesInCart.containsKey(product.uuid) ? 'in-cart' : ''}"
+                        th:text="${productQuantitiesInCart != null && productQuantitiesInCart.containsKey(product.uuid) ? 'В корзине' : 'В корзину'}"
+                        th:disabled="${productQuantitiesInCart != null && productQuantitiesInCart.containsKey(product.uuid)}">В корзину</button>
+            </div>
+        </form>
+    </div>
+    </div>
+    </div>
+</div>
+<br>
+    <script type="text/javascript" th:inline="javascript">
+        function changeQuantity(action, itemId) {
+            const inputId = `input${itemId}`.replace(/"/g, '');
+            const input = document.getElementById(inputId);
+
+            if (!input) {
+                console.error(`Не удалось найти input для товара с ID: ${itemId}`);
+                return;
+            }
+
+            let quantity = parseInt(input.value);
+            if (isNaN(quantity)) {
+                console.error(`Количество не является числом: ${input.value}`);
+                return;
+            }
+
+            if (action === 'plus') {
+                quantity++;
+            } else if (action === 'minus' && quantity > 1) {
+                quantity--;
+            }
+
+            input.value = quantity
+            console.log(`Новое количество для товара с ID ${itemId}: ${input.value}`);
+        }
+    </script>
+</body>
+</html>
