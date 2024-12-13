@@ -30,11 +30,11 @@ public class OrderService {
         return orderMapper.toEntity(restTemplate.postForObject(REQUEST_BUILD_ORDER + "customerUuid=" + customerUuid, null, OrderWebDto.class));
     }
 
-    public Order createOrderForCustomer(Order order, UUID customerUuid, String coupon) {
-        if (coupon == null) {
-            coupon = "";
+    public Order createOrderForCustomer(Order order, UUID customerUuid, Double discountedTotalPrice) {
+        if (discountedTotalPrice != null) {
+            order.setTotalPrice(discountedTotalPrice);
         }
-        return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER + "customerUuid=" +customerUuid + "&coupon=" + coupon, orderMapper.toWebDTO(order), OrderWebDto.class));
+        return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER + "customerUuid=" +customerUuid, orderMapper.toWebDTO(order), OrderWebDto.class));
     }
 
     public Order updateOrder(Order order) {

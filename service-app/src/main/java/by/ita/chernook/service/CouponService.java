@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -26,13 +27,8 @@ public class CouponService {
     private final CouponMapper couponMapper;
 
     public Coupon createCoupon(Coupon coupon)  {
-            try {
-                Coupon existingCoupon = findCouponByCode(coupon.getCode());
-                return null;
-            } catch (Exception e ) {
-                CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
-                return couponMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, couponDatabaseDto, CouponDatabaseDto.class));
-            }
+        CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
+        return couponMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, couponDatabaseDto, CouponDatabaseDto.class));
     }
 
     public Coupon applyCoupon(String code)  {
@@ -42,8 +38,8 @@ public class CouponService {
             coupon.setAvailableUses(couponAvailableUses - 1);
             CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
             restTemplate.put(REQUEST_UPDATE, couponDatabaseDto, CouponDatabaseDto.class);
-            return coupon;
-        } else return null;
+           return coupon;
+        } else throw new IllegalStateException(String.format("Coupon %s is not available", code));
     }
 
     public Coupon findCouponByCode(String code) {
@@ -51,7 +47,9 @@ public class CouponService {
         CouponDatabaseDto couponDatabaseDto = restTemplate.getForObject(url, CouponDatabaseDto.class);
         if (couponDatabaseDto != null) {
             return couponMapper.toEntity(couponDatabaseDto);
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public List<Coupon> findAllGlobalCoupons() {

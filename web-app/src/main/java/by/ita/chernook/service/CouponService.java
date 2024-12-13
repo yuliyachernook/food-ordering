@@ -31,7 +31,11 @@ public class CouponService {
     }
 
     public Coupon applyCoupon(String code) {
-        return couponMapper.toEntity(restTemplate.postForObject(REQUEST_APPLY, null, CouponWebDto.class, code));
+        try {
+            return couponMapper.toEntity(restTemplate.postForObject(REQUEST_APPLY, null, CouponWebDto.class, code));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Coupon findCouponByCode(String code) {

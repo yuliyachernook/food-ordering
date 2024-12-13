@@ -31,11 +31,7 @@ public class OrderController {
 
     @GetMapping
     public String viewOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                            @RequestParam(required = false) Double totalPrice,
-                            @RequestParam(required = false) String applyCoupon,
-                            @RequestParam(required = false) boolean invalidCoupon,
-                            HttpSession session,
-                            Model model) {
+                            Model model, HttpSession session) {
 
         if (customUserDetails == null) {
             return "redirect:login/";
@@ -46,18 +42,21 @@ public class OrderController {
         model.addAttribute("customer", customerMapper.toWebDTO(customer));
         model.addAttribute("order", orderMapper.toWebDTO(order));
 
-        if (totalPrice != null) {
-            model.addAttribute("totalPrice", totalPrice);
-        } else {
-            model.addAttribute("totalPrice", order.getTotalPrice());
+        Double discountedTotalPrice = (Double) session.getAttribute("discountedTotalPrice");
+        if (discountedTotalPrice != null) {
+            model.addAttribute("discountedTotalPrice", discountedTotalPrice);
         }
-        if (applyCoupon!= null) {
-            if (!applyCoupon.isEmpty()) {
-                session.setAttribute("coupon", applyCoupon);
-                model.addAttribute("successMessage", "Промокод успешно применен :)");
-            } else {
-                model.addAttribute("successMessage", "Промокод не найден :(");
-            }
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        String successMessage = (String) session.getAttribute("successMessage");
+
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
+
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
         }
         return "order";
     }
@@ -65,41 +64,52 @@ public class OrderController {
     @PostMapping("/confirm")
     public String confirmOrder( @AuthenticationPrincipal CustomUserDetails customUserDetails, @ModelAttribute OrderWebDto orderWebDto, Model model, HttpSession httpSession) {
         String code = (String) httpSession.getAttribute("coupon");
-        Boolean isInvalid = (Boolean) httpSession.getAttribute("invalidCoupon");
+        Double discountedTotalPrice = (Double) httpSession.getAttribute("discountedTotalPrice");
+
         if (code != null) {
-            couponService.applyCoupon(code);
-            orderService.createOrderForCustomer(orderMapper.toEntity(orderWebDto), customUserDetails.getCustomerUuid(), (String) httpSession.getAttribute("coupon"));
-            cartService.cleanCart(mainService.getCartUuidFromSession(httpSession));
-            httpSession.removeAttribute("coupon");
-            return "redirect:/order/success";
-        } else {
-            orderService.createOrderForCustomer(orderMapper.toEntity(orderWebDto), customUserDetails.getCustomerUuid(), null);
-            cartService.cleanCart(mainService.getCartUuidFromSession(httpSession));
-            return "redirect:/order/success";
+            Coupon appliedCoupon = couponService.applyCoupon(code);
+            if (appliedCoupon == null) {
+                httpSession.removeAttribute("discountedTotalPrice");
+                httpSession.removeAttribute("coupon");
+                httpSession.setAttribute("errorMessage", "Купон недоступен или исчерпан.");
+                return "redirect:/order";
+            }
         }
+
+        orderService.createOrderForCustomer(orderMapper.toEntity(orderWebDto), customUserDetails.getCustomerUuid(), discountedTotalPrice);
+        cartService.cleanCart(mainService.getCartUuidFromSession(httpSession));
+        httpSession.removeAttribute("discountedTotalPrice");
+        httpSession.removeAttribute("coupon");
+
+        return "redirect:/order/success";
     }
 
     @PostMapping("/apply/coupon")
-    public String applyPromoCode(String code, String totalPrice, Model model) {
+    public String applyPromoCode(String code, String totalPrice, Model model, HttpSession session) {
 
         Coupon coupon = couponService.findCouponByCode(code);
-        if (coupon != null) {
-            double newTotalPrice = Double.parseDouble(totalPrice);
 
-            if (coupon.getCouponType().equals(CouponTypeEnum.FIXED)) {
-                newTotalPrice = newTotalPrice - coupon.getDiscount();
-            } else if (coupon.getCouponType().equals(CouponTypeEnum.PERCENT)) {
-                newTotalPrice = newTotalPrice - (newTotalPrice * coupon.getDiscount() / 100);
-            }
-
-            if (newTotalPrice < 0) newTotalPrice = 0;
-
-            model.addAttribute("totalPrice", newTotalPrice);
-            model.addAttribute("applyCoupon", code);
-            return "redirect:/order?totalPrice=" + model.getAttribute("totalPrice") + "&applyCoupon=" +model.getAttribute("applyCoupon");
-        } else {
-            return "redirect:/order?applyCoupon=" +model.getAttribute("applyCoupon");
+        if (coupon == null || coupon.getAvailableUses() == 0) {
+            session.removeAttribute("coupon");
+            session.removeAttribute("discountedTotalPrice");
+            session.setAttribute("errorMessage", "Купон не найден или недействителен.");
+            return "redirect:/order";
         }
+
+        double newTotalPrice = Double.parseDouble(totalPrice);
+
+        if (coupon.getCouponType().equals(CouponTypeEnum.FIXED)) {
+            newTotalPrice = newTotalPrice - coupon.getDiscount();
+        } else if (coupon.getCouponType().equals(CouponTypeEnum.PERCENT)) {
+            newTotalPrice = newTotalPrice - (newTotalPrice * coupon.getDiscount() / 100);
+        }
+
+        if (newTotalPrice < 0) newTotalPrice = 0;
+
+        session.setAttribute("coupon", code);
+        session.setAttribute("successMessage", "Промокод успешно применен :)");
+        session.setAttribute("discountedTotalPrice", newTotalPrice);
+        return "redirect:/order";
     }
 
     @GetMapping("success")
