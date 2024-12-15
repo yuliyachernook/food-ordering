@@ -27,7 +27,6 @@ public class ProductController {
         return productMapper.toWebDTO(insertedProduct);
     }
 
-
     @PutMapping("/update")
     public ProductWebDto update(@RequestBody ProductWebDto productDatabaseDto) {
         Product updatedProduct = productService.updateProduct(productMapper.toEntity(productDatabaseDto));

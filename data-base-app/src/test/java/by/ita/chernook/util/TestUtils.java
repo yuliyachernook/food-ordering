@@ -5,6 +5,7 @@ import by.ita.chernook.dto.enums.OrderStatusEnum;
 import by.ita.chernook.dto.enums.UserRoleEnum;
 import by.ita.chernook.model.*;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public abstract class TestUtils {
                 .build();
     }
 
-    protected Product buildProduct(UUID uuid, String itemName, double price, String description, CategoryEnum category, int discountPercentage,
+    protected Product buildProduct(UUID uuid, String itemName, BigDecimal price, String description, CategoryEnum category, int discountPercentage,
                                    ZonedDateTime creationDateTime) {
         return Product.builder()
                 .uuid(uuid)
@@ -34,7 +35,7 @@ public abstract class TestUtils {
     }
 
     protected Order buildOrder(UUID uuid, List<OrderItem> orderItems, DeliveryAddress deliveryAddress, Customer customer, OrderStatusEnum orderStatus,
-                               String comment, double totalPrice) {
+                               String comment, BigDecimal totalPrice) {
         return Order.builder()
                 .uuid(uuid)
                 .orderItems(orderItems)
@@ -46,7 +47,7 @@ public abstract class TestUtils {
                 .build();
     }
 
-    protected OrderItem buildOrderItem(UUID uuid, Product product, double price, int quantity) {
+    protected OrderItem buildOrderItem(UUID uuid, Product product, BigDecimal price, int quantity) {
         return OrderItem.builder()
                 .uuid(uuid)
                 .product(product)
@@ -86,8 +87,6 @@ public abstract class TestUtils {
                 .name(name)
                 .description(description)
                 .code(code)
-                .discountPercentage(discountPercentage)
-                .discountAmount(discountAmount)
                 .build();
     }
 

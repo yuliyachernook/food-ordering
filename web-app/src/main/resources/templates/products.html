@@ -5,42 +5,48 @@
     <title>Товары</title>
     <style>
         body {
-           font-family: Arial, sans-serif;
-           margin: 20px;
-           background-color: #f4f4f4;
-       }
-       h1 {
-           text-align: center;
-           color: #333;
-       }
-       table {
-           width: 100%;
-           border-collapse: collapse;
-           margin: 20px 0;
-           background-color: #fff;
-       }
-       th, td {
-           padding: 12px;
-           text-align: left;
-           border-bottom: 1px solid #ddd;
-       }
-       th {
-           background-color: #6492b4;
-           color: white;
-       }
-       tr:hover {
-           background-color: #f1f1f1;
-       }
-         .btn {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #6492b4;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
             padding: 8px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
-            color: white;width: 120px;
+            color: white;
+            width: 120px;
             text-align: center;
             display: inline-block;
             font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .btn-primary {
             background-color: #007BFF;
@@ -50,9 +56,11 @@
         }
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
         .btn-danger:hover {
             background-color: #c82333;
+            transform: scale(1.05);
         }
         .item-name {
             width: 20%;
@@ -69,9 +77,22 @@
         .discount {
             width: 10%;
         }
+
+        .back-link {
+            display: block;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
+<h1>Все товары</h1>
 <table>
     <thead>
     <tr>
@@ -85,17 +106,15 @@
     </tr>
     </thead>
     <tbody>
-    <h1>Все товары</h1>
-
     <tr th:if="${products.empty}">
-        <td colspan="2">Нет товаров</td>
+        <td colspan="7" style="text-align: center;">Нет товаров</td>
     </tr>
     <tr th:each="product : ${products}">
         <span hidden th:text="${product.uuid}"></span>
         <td><span th:text="${product.itemName}"></span></td>
         <td><span th:text="${product.description}"></span></td>
         <td><span th:text="${product.price}"></span></td>
-        <td><span th:text="${product.category}"></span></td>
+        <td><span th:text="${product.category.name}"></span></td>
         <td><span th:text="${product.discountPercentage > 0 ? product.discountPercentage : '-'}"></span></td>
         <td><a th:href="@{/admin/products/update(uuid=${product.uuid})}" class="btn btn-primary">Редактировать</a></td>
         <td>
@@ -103,11 +122,10 @@
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
         </td>
-
     </tr>
     </tbody>
 </table>
 <br>
-<a th:href="@{/admin/}">На главную страницу</a>
+<a th:href="@{/admin/}" class="back-link">На главную страницу</a>
 </body>
 </html>

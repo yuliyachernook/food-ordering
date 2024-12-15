@@ -1,6 +1,7 @@
 package by.ita.chernook.controller;
 
 import by.ita.chernook.dto.CouponWebDto;
+import by.ita.chernook.dto.ProductWebDto;
 import by.ita.chernook.mapper.CouponMapper;
 import by.ita.chernook.model.Coupon;
 import by.ita.chernook.service.CouponService;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +24,7 @@ public class AdminCouponController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-        List<CouponWebDto> coupons = couponService.readAllGlobalCoupons().stream()
+        List<CouponWebDto> coupons = couponService.readAllCoupons().stream()
                 .map(couponMapper::toWebDTO)
                 .collect(Collectors.toList());
         model.addAttribute("coupons", coupons);
@@ -36,17 +38,29 @@ public class AdminCouponController {
     }
 
     @PostMapping(value = "/create")
-    public String createGlobalCoupon(@ModelAttribute CouponWebDto couponWebDto, Model model) {
+    public String createCoupon(@ModelAttribute CouponWebDto couponWebDto, Model model) {
         Coupon createdCoupon = couponService.createCoupon(couponMapper.toEntity(couponWebDto));
         CouponWebDto coupon = couponMapper.toWebDTO(createdCoupon);
         model.addAttribute("coupon", coupon);
-        return "redirect:/admin/";
+        return "redirect:/admin/coupons/";
     }
 
-    @GetMapping("/add/coupon")
-    public String addCouponToCustomer(@RequestParam("uuid") String uuid, Model model) {
-        model.addAttribute("uuid", uuid);
-        model.addAttribute("coupon", new CouponWebDto());
-        return "addCoupon";
+    @GetMapping("update")
+    public String showUpdateForm(@RequestParam("uuid") String uuid, Model model) {
+        CouponWebDto couponWebDto =  couponMapper.toWebDTO(couponService.readCouponById(uuid));
+        model.addAttribute("coupon", couponWebDto);
+        return "updateCoupon";
+    }
+
+    @PostMapping("update")
+    public String updateCoupon(@ModelAttribute CouponWebDto couponWebDto, Model model) {
+        couponMapper.toWebDTO(couponService.updateCoupon(couponMapper.toEntity(couponWebDto)));
+        return "redirect:/admin/coupons/";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam String uuid) {
+        couponService.deleteCouponById(uuid);
+        return "redirect:/admin/coupons/";
     }
 }

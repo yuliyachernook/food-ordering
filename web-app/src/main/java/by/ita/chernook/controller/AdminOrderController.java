@@ -40,11 +40,4 @@ public class AdminOrderController {
         orderMapper.toWebDTO(orderService.updateOrder(orderMapper.toEntity(orderWebDto)));
         return "redirect:/admin/orders/";
     }
-
-//
-//    @PostMapping("/delete")
-//    public String delete(@RequestParam String uuid) {
-//        productService.deleteProductById(uuid);
-//        return "redirect:/products/";
-//    }
 }

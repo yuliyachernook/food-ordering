@@ -18,14 +18,11 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-
     @ManyToOne
     @JoinColumn(name = "cartUuid", nullable = false)
     private Cart cart;
-
     @ManyToOne
     @JoinColumn(name = "productUuid", nullable = false)
     private Product product;
-
     private Integer quantity;
 }

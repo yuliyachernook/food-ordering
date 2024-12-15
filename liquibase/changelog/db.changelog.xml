@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="yuliya">
+        <createTable tableName="users">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="creation_date_time" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="current_timestamp"/>
+            <column name="user_role_enum" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="yuliya">
+        <createTable tableName="product">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="item_name" type="VARCHAR(255)"/>
+            <column name="price" type="NUMERIC(19, 2)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="category" type="VARCHAR(255)"/>
+            <column name="discount_percentage" type="INTEGER"/>
+            <column name="image" type="oid"/>
+            <column name="creation_date_time" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="yuliya">
+        <createTable tableName="cart">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creation_date_time" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="yuliya">
+        <createTable tableName="cart_item">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cart_uuid" type="UUID"/>
+            <column name="product_uuid" type="UUID"/>
+            <column name="quantity" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="cart_item"
+                baseColumnNames="cart_uuid"
+                referencedTableName="cart"
+                referencedColumnNames="uuid"
+                constraintName="fk_cart_item_cart"/>
+    </changeSet>
+
+    <changeSet id="6" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="cart_item"
+                baseColumnNames="product_uuid"
+                referencedTableName="product"
+                referencedColumnNames="uuid"
+                constraintName="fk_cart_item_product"/>
+    </changeSet>
+
+    <changeSet id="7" author="yuliya">
+        <createTable tableName="coupon">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="coupon_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount" type="INTEGER"/>
+            <column name="available_uses" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="yuliya">
+        <createTable tableName="customer">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="creation_date_time" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="current_timestamp"/>
+            <column name="balance" type="NUMERIC(19, 2)"/>
+            <column name="user_uuid" type="UUID"/>
+            <column name="cart_uuid" type="UUID"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="customer"
+                baseColumnNames="cart_uuid"
+                referencedTableName="cart"
+                referencedColumnNames="uuid"
+                constraintName="fk_customer_cart"/>
+    </changeSet>
+
+    <changeSet id="10" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="customer"
+                baseColumnNames="user_uuid"
+                referencedTableName="users"
+                referencedColumnNames="uuid"
+                constraintName="fk_customer_user"/>
+    </changeSet>
+
+    <changeSet id="11" author="yuliya">
+        <createTable tableName="delivery_address">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="house" type="VARCHAR(255)"/>
+            <column name="apartment" type="INTEGER"/>
+            <column name="customer_uuid" type="UUID"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="12" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="delivery_address"
+                baseColumnNames="customer_uuid"
+                referencedTableName="customer"
+                referencedColumnNames="uuid"
+                constraintName="fk_delivery_address_customer"/>
+    </changeSet>
+
+    <changeSet id="13" author="yuliya">
+        <createTable tableName="orders">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="customer_uuid" type="UUID"/>
+            <column name="delivery_address_uuid" type="UUID"/>
+            <column name="total_price" type="NUMERIC(19, 2)"/>
+            <column name="order_status" type="VARCHAR(255)"/>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="creation_date_time" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="14" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="customer_uuid"
+                referencedTableName="customer"
+                referencedColumnNames="uuid"
+                constraintName="fk_orders_customer"/>
+    </changeSet>
+
+    <changeSet id="15" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="delivery_address_uuid"
+                referencedTableName="delivery_address"
+                referencedColumnNames="uuid"
+                constraintName="fk_orders_delivery_address"/>
+    </changeSet>
+
+    <changeSet id="16" author="yuliya">
+        <createTable tableName="order_item">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_uuid" type="UUID"/>
+            <column name="product_uuid" type="UUID"/>
+            <column name="price" type="NUMERIC(19, 2)"/>
+            <column name="quantity" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="17" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="order_item"
+                baseColumnNames="order_uuid"
+                referencedTableName="orders"
+                referencedColumnNames="uuid"
+                constraintName="fk_order_item_orders"/>
+    </changeSet>
+
+    <changeSet id="18" author="yuliya">
+        <addForeignKeyConstraint
+                baseTableName="order_item"
+                baseColumnNames="product_uuid"
+                referencedTableName="product"
+                referencedColumnNames="uuid"
+                constraintName="fk_order_item_product"/>
+    </changeSet>
+
+    <changeSet id="19" author="yuliya">
+        <insert tableName="users">
+            <column name="uuid" value="f272b4ca-fe19-4d62-b38a-4633f7047edd"/>
+            <column name="login" value="333"/>
+            <column name="password" value="$2a$10$QKe8CUsdBr.RNHD3sXYXlOJrke.B.uTLhcX5Nk/pTzzkCZpD/.IoK"/>
+            <column name="user_role_enum" value="ADMIN"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

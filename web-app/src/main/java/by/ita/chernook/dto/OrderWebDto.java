@@ -1,7 +1,7 @@
 package by.ita.chernook.dto;
 
 import by.ita.chernook.dto.enums.OrderStatusEnum;
-import by.ita.chernook.util.DateTimeUtils;
+import by.ita.chernook.util.DateTimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +28,6 @@ public class OrderWebDto {
     private String comment;
 
     public String getFormattedCreationDateTime() {
-        return DateTimeUtils.formatZonedDateTime(creationDateTime);
+        return DateTimeUtil.formatZonedDateTime(creationDateTime);
     }
 }

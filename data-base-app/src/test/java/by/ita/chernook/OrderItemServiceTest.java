@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,7 @@ public class OrderItemServiceTest extends TestUtils {
 
     @Test
     void insertOrderItem_then_return() {
-        OrderItem testOrderItem = buildOrderItem(UUID.randomUUID(), new Product(), 25.5, 2);
+        OrderItem testOrderItem = buildOrderItem(UUID.randomUUID(), new Product(), BigDecimal.valueOf(25.5), 2);
 
         when(orderItemRepository.save(testOrderItem)).thenReturn(testOrderItem);
 
@@ -41,7 +42,7 @@ public class OrderItemServiceTest extends TestUtils {
     @Test
     void updateOrderItem_then_return() {
         UUID orderItemUuid = UUID.randomUUID();
-        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), 25.5, 2);
+        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), BigDecimal.valueOf(25.5), 2);
 
         when(orderItemRepository.existsById(orderItemUuid)).thenReturn(true);
         when(orderItemRepository.save(testOrderItem)).thenReturn(testOrderItem);
@@ -57,7 +58,7 @@ public class OrderItemServiceTest extends TestUtils {
     @Test
     void updateOrderItem_then_throws_NoSuchElementException() {
         UUID orderItemUuid = UUID.randomUUID();
-        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), 25.5, 2);
+        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), BigDecimal.valueOf(25.5), 2);
 
         when(orderItemRepository.existsById(orderItemUuid)).thenReturn(false);
 
@@ -70,7 +71,7 @@ public class OrderItemServiceTest extends TestUtils {
     @Test
     void deleteOrderItem_then_return() {
         UUID orderItemUuid = UUID.randomUUID();
-        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), 25.5, 2);
+        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), BigDecimal.valueOf(25.5), 2);
 
         when(orderItemRepository.findById(orderItemUuid)).thenReturn(Optional.of(testOrderItem));
         doNothing().when(orderItemRepository).deleteById(orderItemUuid);
@@ -98,7 +99,7 @@ public class OrderItemServiceTest extends TestUtils {
     @Test
     void findOrderItemById_then_return() {
         UUID orderItemUuid = UUID.randomUUID();
-        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), 25.5, 2);
+        OrderItem testOrderItem = buildOrderItem(orderItemUuid, new Product(), BigDecimal.valueOf(25.5), 2);
 
         when(orderItemRepository.findById(orderItemUuid)).thenReturn(Optional.of(testOrderItem));
 
@@ -123,8 +124,8 @@ public class OrderItemServiceTest extends TestUtils {
     @Test
     void findAlLByOrderUuid_then_return() {
         UUID orderUUid = UUID.randomUUID();
-        OrderItem testOrderItem = buildOrderItem(UUID.randomUUID(), new Product(), 25.5, 2);
-        OrderItem testOrderItem2 = buildOrderItem(UUID.randomUUID(), new Product(), 44.3, 4);
+        OrderItem testOrderItem = buildOrderItem(UUID.randomUUID(), new Product(), BigDecimal.valueOf(25.5), 2);
+        OrderItem testOrderItem2 = buildOrderItem(UUID.randomUUID(), new Product(), BigDecimal.valueOf(44.3), 4);
 
         List<OrderItem> testList = new ArrayList<>(Arrays.asList(testOrderItem, testOrderItem2));
 

@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestConfig {
 
-    private static final String SERVICE_APP_URL = "http://localhost:8111/business";
+    private static final String SERVICE_APP_URL = "http://nginx/business";
 
     @Bean
     public RestTemplate serviceAppClient() {

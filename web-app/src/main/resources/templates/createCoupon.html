@@ -1,8 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Добавить купон</title>
-    <link rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #6492b4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #567f9f;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -22,14 +77,15 @@
         </div>
         <div class="form-group">
             <label for="coupon-type">Тип купона:</label>
-            <select id="coupon-type" name="couponType" required>
-                <option value="PERCENT">Процентная скидка</option>
-                <option value="FIXED">Фиксированная скидка</option>
+            <select id="coupon-type" th:field="${coupon.couponType}" required>
+                <option th:each="type : ${T(by.ita.chernook.dto.enums.CouponTypeEnum).values()}"
+                        th:value="${type}"
+                        th:text="${type.name}"></option>
             </select>
         </div>
         <div class="form-group">
             <label for="discount">Размер скидки:</label>
-            <input type="number" id="discount" name="discount" required>
+            <input type="number" id="discount" min="0" name="discount" required>
         </div>
         <div class="form-group">
             <label for="available-uses">Количество использований:</label>
@@ -38,8 +94,5 @@
         <button type="submit" class="btn btn-primary">Добавить купон</button>
     </form>
 </div>
-
-<script>
-</script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Добавить продукт</title>
+    <title>Редактировать купон</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -40,7 +40,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-          button {
+        button {
             background-color: #6492b4;
             color: white;
             border: none;
@@ -54,48 +54,51 @@
         button:hover {
             background-color: #567f9f;
         }
+        .current-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Добавить товар</h1>
-    <form th:action="@{/admin/products/create}" th:method="post" th:object="${product}" enctype="multipart/form-data">
+    <h1>Редактирование купона</h1>
+    <form th:action="@{/admin/coupons/update(id=${coupon.uuid})}" th:method="post" th:object="${coupon}" enctype="multipart/form-data">
+        <input type="hidden" th:field="${coupon.uuid}"/>
         <div class="form-group">
-            <label for="name">Название:</label>
-            <input type="text" id="name" th:field="${product.itemName}" required>
+            <label for="name">Название купона:</label>
+            <input type="text" id="name" name="name" th:field="${coupon.name}" required>
         </div>
-
         <div class="form-group">
-            <label for="description">Описание:</label>
-            <input type="text" id="description" th:field="${product.description}" required>
+            <label for="description">Описание купона:</label>
+            <textarea id="description" name="description" th:field="${coupon.description}" required></textarea>
         </div>
-
         <div class="form-group">
-            <label for="price">Цена:</label>
-            <input type="number" id="price" th:field="${product.price}" required>
+            <label for="code">Код купона:</label>
+            <input type="text" id="code" name="code" th:field="${coupon.code}" required>
         </div>
-
         <div class="form-group">
-            <label for="category">Категория:</label>
-            <select id="category" th:field="${product.category}" required>
-                <option th:each="category : ${T(by.ita.chernook.dto.enums.CategoryEnum).values()}"
-                        th:value="${category}"
-                        th:text="${category.name}"></option>
+            <label for="coupon-type">Тип купона:</label>
+            <select id="coupon-type" th:field="${coupon.couponType}" required>
+                <option th:each="type : ${T(by.ita.chernook.dto.enums.CouponTypeEnum).values()}"
+                        th:value="${type}"
+                        th:text="${type.name}"></option>
             </select>
         </div>
-
         <div class="form-group">
-            <label for="discountPercentage">Скидка (%):</label>
-            <input type="number" id="discountPercentage" th:field="${product.discountPercentage}" value="0" min="0" max="100" required>
+            <label for="discount">Размер скидки:</label>
+            <input type="number" id="discount" min="0" name="discount" th:field="${coupon.discount}" required>
         </div>
-
         <div class="form-group">
-            <label for="image">Изображение:</label>
-            <input id="image" type="file" name="file" required/>
+            <label for="available-uses">Количество использований:</label>
+            <input type="number" id="available-uses" name="availableUses" th:field="${coupon.availableUses}" required>
         </div>
-
-        <button type="submit">Добавить</button>
+        <button type="submit">Редактировать</button>
     </form>
+    <div class="form-group">
+        <a th:href="@{/admin/coupons}">Назад к списку купонов</a>
+    </div>
 </div>
 </body>
 </html>

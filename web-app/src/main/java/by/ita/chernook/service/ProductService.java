@@ -2,7 +2,6 @@ package by.ita.chernook.service;
 
 import by.ita.chernook.dto.ProductWebDto;
 import by.ita.chernook.dto.enums.CategoryEnum;
-import by.ita.chernook.mapper.CartItemMapper;
 import by.ita.chernook.mapper.ProductMapper;
 import by.ita.chernook.model.Product;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,6 @@ public class ProductService {
 
     private final RestTemplate restTemplate;
     private final ProductMapper productMapper;
-    private CartService cartService;
-    private CartItemMapper cartItemMapper;
 
     public List<Product> readAllProductsForPage(CategoryEnum category) {
         return (category != null) ? readAllProductsByCategory(category): readAllProducts();
@@ -79,5 +76,4 @@ public class ProductService {
     public void deleteProductById(String uuid) {
         restTemplate.delete(REQUEST_DELETE, uuid);
     }
-
 }

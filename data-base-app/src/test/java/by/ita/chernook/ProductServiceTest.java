@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -28,7 +29,7 @@ class ProductServiceTest extends TestUtils {
 
     @Test
     void insertProduct_then_return() {
-        Product testProduct = buildProduct(UUID.randomUUID(), "Test item", 25.2, "Test description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(UUID.randomUUID(), "Test item", BigDecimal.valueOf(25.2), "Test description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(productRepository.save(testProduct)).thenReturn(testProduct);
@@ -43,7 +44,7 @@ class ProductServiceTest extends TestUtils {
     @Test
     void updateProduct_then_return() {
         UUID productUuid = UUID.randomUUID();
-        Product testProduct = buildProduct(productUuid, "Test item", 10.15, "Updated description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(productUuid, "Test item", BigDecimal.valueOf(10.15), "Updated description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(productRepository.existsById(productUuid)).thenReturn(true);
@@ -60,7 +61,7 @@ class ProductServiceTest extends TestUtils {
     @Test
     void updateProduct_then_throws_NoSuchElementException() {
         UUID productUuid = UUID.randomUUID();
-        Product testProduct = buildProduct(productUuid, "Test item", 25.2, "Test description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(productUuid, "Test item", BigDecimal.valueOf(25.2), "Test description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(productRepository.existsById(productUuid)).thenReturn(false);
@@ -74,7 +75,7 @@ class ProductServiceTest extends TestUtils {
     @Test
     void deleteProduct_then_return() {
         UUID productUuid = UUID.randomUUID();
-        Product testProduct = buildProduct(productUuid, "Test item", 25.2, "Test description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(productUuid, "Test item", BigDecimal.valueOf(25.2), "Test description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(productRepository.findById(productUuid)).thenReturn(Optional.of(testProduct));
@@ -103,7 +104,7 @@ class ProductServiceTest extends TestUtils {
     @Test
     void findProductById_then_return() {
         UUID productUuid = UUID.randomUUID();
-        Product testProduct = buildProduct(productUuid, "Test item", 25.2, "Test description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(productUuid, "Test item", BigDecimal.valueOf(25.2), "Test description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(productRepository.findById(productUuid)).thenReturn(Optional.of(testProduct));
@@ -128,9 +129,9 @@ class ProductServiceTest extends TestUtils {
 
     @Test
     void findAll_then_return() {
-        Product testProduct = buildProduct(UUID.randomUUID(), "Test item", 25.2, "Test description", CategoryEnum.PIZZA,
+        Product testProduct = buildProduct(UUID.randomUUID(), "Test item", BigDecimal.valueOf(25.2), "Test description", CategoryEnum.PIZZA,
                 10, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
-        Product testProduct2 = buildProduct(UUID.randomUUID(), "Test item 2", 48.4, "Test description 2", CategoryEnum.DRINKS,
+        Product testProduct2 = buildProduct(UUID.randomUUID(), "Test item 2", BigDecimal.valueOf(48.4), "Test description 2", CategoryEnum.DRINKS,
                 5, ZonedDateTime.parse("2024-09-09T00:28:39.295+03:00"));
         List<Product> testList = new ArrayList<>(Arrays.asList(testProduct, testProduct2));
 

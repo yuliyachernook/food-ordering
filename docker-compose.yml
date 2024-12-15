@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+
+  web-app:
+    build: ./web-app
+    ports:
+      - "8091:8091"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - service-app-1
+      - service-app-2
+    networks:
+      - app-network
+
+  service-app-1:
+    build: ./service-app
+    depends_on:
+      - data-base-app-1
+    networks:
+      - app-network
+
+  service-app-2:
+    build: ./service-app
+    depends_on:
+      - data-base-app-2
+    networks:
+      - app-network
+
+  data-base-app-1:
+    build: ./data-base-app
+    networks:
+      - app-network
+
+  data-base-app-2:
+    build: ./data-base-app
+    networks:
+      - app-network
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://database:5432/mydatabase
+      LIQUIBASE_COMMAND_USERNAME: myuser
+      LIQUIBASE_COMMAND_PASSWORD: mypassword
+      LIQUIBASE_COMMAND_CHANGELOG_FILE: db.changelog.xml
+      LIQUIBASE_SEARCH_PATH: /liquibase/changelog
+    volumes:
+      - ./liquibase/changelog:/liquibase/changelog
+    depends_on:
+      - database
+    entrypoint: [ "liquibase", "--changeLogFile=db.changelog.xml", "update" ]
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - data-base-app-1
+      - data-base-app-2
+      - service-app-1
+      - service-app-2
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -5,42 +5,48 @@
     <title>Товары</title>
     <style>
         body {
-           font-family: Arial, sans-serif;
-           margin: 20px;
-           background-color: #f4f4f4;
-       }
-       h1 {
-           text-align: center;
-           color: #333;
-       }
-       table {
-           width: 100%;
-           border-collapse: collapse;
-           margin: 20px 0;
-           background-color: #fff;
-       }
-       th, td {
-           padding: 12px;
-           text-align: left;
-           border-bottom: 1px solid #ddd;
-       }
-       th {
-           background-color: #6492b4;
-           color: white;
-       }
-       tr:hover {
-           background-color: #f1f1f1;
-       }
-         .btn {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #6492b4;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
             padding: 8px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
-            color: white;width: 120px;
+            color: white;
+            width: 120px;
             text-align: center;
             display: inline-block;
             font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .btn-primary {
             background-color: #007BFF;
@@ -50,9 +56,11 @@
         }
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
         .btn-danger:hover {
             background-color: #c82333;
+            transform: scale(1.05);
         }
         .date {
             width: 20%;
@@ -66,9 +74,22 @@
         .status {
             width: 20%;
         }
+
+        .back-link {
+            display: block;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
+<h1>Все заказы</h1>
 <table>
     <thead>
     <tr>
@@ -80,22 +101,20 @@
     </tr>
     </thead>
     <tbody>
-    <h1>Все заказы</h1>
-
     <tr th:if="${orders.empty}">
-        <td colspan="2">Нет заказов</td>
+        <td colspan="7" style="text-align: center;">Нет заказов</td>
     </tr>
     <tr th:each="order : ${orders}">
         <span hidden th:text="${order.uuid}"></span>
-        <td><span th:text="${#dates.format(order.creationDateTime, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+        <td><span th:text="${order.formattedCreationDateTime}"></span></td>
         <td><span th:text="${order.totalPrice}"></span></td>
         <td><span th:text="${order.comment}"></span></td>
         <td><span th:text="${order.orderStatus}"></span></td>
-        <td><a th:href="@{/admin/orders/update(uuid=${order.uuid})}" class="btn btn-primary">Редактировать</a></td>
+        <td><a th:href="@{/admin/orders/update(uuid=${order.uuid})}" class="btn btn-primary">Подробнее</a></td>
     </tr>
     </tbody>
 </table>
 <br>
-<a th:href="@{/admin/}">На главную страницу</a>
+<a th:href="@{/admin/}" class="back-link">На главную страницу</a>
 </body>
 </html>

@@ -42,7 +42,7 @@ public class CustomerController {
                 .sorted(Comparator.comparing(OrderWebDto::getCreationDateTime).reversed()) // Сортируем по дате создания в обратном порядке
                 .limit(5)
                 .collect(Collectors.toList());
-        List<CouponWebDto> coupons = couponService.readAllGlobalCoupons().stream()
+        List<CouponWebDto> coupons = couponService.readAllCoupons().stream()
                 .map(couponMapper::toWebDTO)
                 .collect(Collectors.toList());
         model.addAttribute("coupons", coupons);

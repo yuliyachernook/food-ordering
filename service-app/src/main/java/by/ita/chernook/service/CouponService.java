@@ -8,10 +8,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +20,8 @@ public class CouponService {
 
     private static final String REQUEST_CREATE = "/coupon/create";
     private static final String REQUEST_UPDATE = "/coupon/update";
+    private static final String REQUEST_READ = "/coupon/read?uuid=%s";
+    private static final String REQUEST_DELETE = "/coupon/delete?uuid=%s";
     private static final String REQUEST_READ_BY_CODE = "/coupon/read/code?code=%s";
     private static final String REQUEST_READ_GLOBAL = "/coupon/read/all";
 
@@ -29,6 +31,20 @@ public class CouponService {
     public Coupon createCoupon(Coupon coupon)  {
         CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
         return couponMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, couponDatabaseDto, CouponDatabaseDto.class));
+    }
+
+    public Coupon updateCoupon(Coupon coupon) {
+        CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
+        restTemplate.put(REQUEST_UPDATE, couponDatabaseDto);
+        return findCouponById(coupon.getUuid());
+    }
+
+    public Coupon findCouponById(UUID uuid) {
+        return couponMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), CouponDatabaseDto.class));
+    }
+
+    public void deleteCoupon(UUID uuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
     }
 
     public Coupon applyCoupon(String code)  {
