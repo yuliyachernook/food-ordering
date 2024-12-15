@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,7 +32,6 @@ public class OrderService {
     private final RestTemplate restTemplate;
     private final CustomerService customerService;
     private final CartItemService cartItemService;
-    private final CouponService couponService;
 
     private final OrderMapper orderMapper;
 
@@ -39,6 +39,9 @@ public class OrderService {
         Customer customer = customerService.findCustomerById(customerUuid);
         order.setCustomer(customer);
         order.setOrderStatus(OrderStatusEnum.NEW);
+        if (order.getTotalPrice().compareTo(customer.getBalance()) > 0) {
+            throw new IllegalStateException("Insufficient funds");
+        }
         OrderDatabaseDto orderDatabaseDto = orderMapper.toDatabaseDTO(order);
         return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER, orderDatabaseDto, OrderDatabaseDto.class));
     }
@@ -63,10 +66,12 @@ public class OrderService {
         List<OrderItem> orderItems = cartItems.stream()
                 .map(cartItem -> {
                     Product product = cartItem.getProduct();
-                    double price = product.getPrice();
-                    double discountPercentage = product.getDiscountPercentage();
+                    BigDecimal price = product.getPrice();
+                    int discountPercentage = product.getDiscountPercentage();
+
                     if (discountPercentage > 0) {
-                        price -= price * (discountPercentage / 100);
+                        BigDecimal discount = price.multiply(BigDecimal.valueOf(discountPercentage)).divide(BigDecimal.valueOf(100));
+                        price = price.subtract(discount);
                     }
                     return OrderItem.builder()
                             .product(product)
@@ -76,9 +81,7 @@ public class OrderService {
                 })
                 .toList();
 
-        double totalPrice = orderItems.stream()
-                .mapToDouble(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
-                .sum();
+        BigDecimal totalPrice = calculateTotalPrice(orderItems);
 
         return Order.builder().customer(customer).orderItems(orderItems).totalPrice(totalPrice).build();
     }
@@ -95,5 +98,18 @@ public class OrderService {
         return response.getBody().stream()
                 .map(orderMapper::toEntity)
                 .collect(Collectors.toList());
+    }
+
+    private BigDecimal calculateTotalPrice(List<OrderItem> orderItems) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for (OrderItem orderItem : orderItems) {
+            BigDecimal itemPrice = orderItem.getPrice();
+            int quantity = orderItem.getQuantity();
+            BigDecimal itemTotal = itemPrice.multiply(BigDecimal.valueOf(quantity));
+            totalPrice = totalPrice.add(itemTotal);
+        }
+
+        return totalPrice;
     }
 }

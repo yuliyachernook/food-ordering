@@ -30,6 +30,7 @@ public class OrderMapper {
                 .customer(order.getCustomer() != null ? customerMapper.toDatabaseDTO(order.getCustomer()) : null)
                 .orderStatus(order.getOrderStatus())
                 .comment(order.getComment())
+                .creationDateTime(order.getCreationDateTime())
                 .build();
     }
 
@@ -46,6 +47,7 @@ public class OrderMapper {
                 .totalPrice(order.getTotalPrice())
                 .orderStatus(order.getOrderStatus())
                 .comment(order.getComment())
+                .creationDateTime(order.getCreationDateTime())
                 .build();
     }
 
@@ -62,6 +64,7 @@ public class OrderMapper {
                 .totalPrice(orderDatabaseDto.getTotalPrice())
                 .orderStatus(orderDatabaseDto.getOrderStatus())
                 .comment(orderDatabaseDto.getComment())
+                .creationDateTime(orderDatabaseDto.getCreationDateTime())
                 .build();
     }
 
@@ -78,6 +81,7 @@ public class OrderMapper {
                 .totalPrice(orderWebDto.getTotalPrice())
                 .orderStatus(orderWebDto.getOrderStatus())
                 .comment(orderWebDto.getComment())
+                .creationDateTime(orderWebDto.getCreationDateTime())
                 .build();
     }
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -16,7 +17,7 @@ public class ProductWebDto {
 
     private UUID uuid;
     private String itemName;
-    private double price;
+    private BigDecimal price;
     private String description;
     private CategoryEnum category;
     private int discountPercentage;

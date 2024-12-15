@@ -13,12 +13,15 @@ public class UserService {
 
     private static final String REQUEST_CREATE = "/user/create";
     private static final String REQUEST_READ = "/user/read/login/%s";
-
     private final RestTemplate restTemplate;
     private final UserMapper userMapper;
 
     public User findUserByLogin(String login) {
-        return userMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, login), UserDatabaseDto.class));
+        try {
+            return userMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, login), UserDatabaseDto.class));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public User createUser(User user) {

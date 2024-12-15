@@ -14,13 +14,23 @@ public class ErrorController {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public String handleHttpClientErrorException(HttpClientErrorException ex, Model model) {
-        model.addAttribute(ERROR_ATTRIBUTE_NAME, String.format("Client error occurred: %s", ex.getMessage()));
+        model.addAttribute(ERROR_ATTRIBUTE_NAME, String.format("Произошла ошибка: %s", ex.getMessage()));
         return ERROR_PAGE_NAME;
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
     public String handleHttpServerErrorException(HttpServerErrorException ex, Model model) {
-        model.addAttribute(ERROR_ATTRIBUTE_NAME, String.format("Server error occurred: %s", ex.getMessage()));
+        if (ex.getResponseBodyAsString().contains("Insufficient funds")) {
+            model.addAttribute(ERROR_ATTRIBUTE_NAME, "Не удалось создать заказ. Недостаточно средств.");
+        } else {
+            model.addAttribute(ERROR_ATTRIBUTE_NAME, String.format("Произошла ошибка: %s", ex.getMessage()));
+        }
+        return ERROR_PAGE_NAME;
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception ex, Model model) {
+        model.addAttribute(ERROR_ATTRIBUTE_NAME, String.format("Произошла ошибка: %s", ex.getMessage()));
         return ERROR_PAGE_NAME;
     }
 }

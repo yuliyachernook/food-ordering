@@ -50,6 +50,13 @@
             button:hover {
                 background-color: #CB542A;
             }
+               p {
+            text-align: center;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
         </style>
     </head>
     <body>
@@ -81,6 +88,9 @@
                     <input type="email" class="form-control" id="email" th:field="*{email}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                <div th:if="${error}" class="error">
+                    <p>Этот логин уже занят. Пожалуйста, попробуйте другой</p>
+                </div>
             </form>
         </div>
     </body>

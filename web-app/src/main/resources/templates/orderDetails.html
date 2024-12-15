@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали заказа</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .order-details {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .order-status {
+            font-size: 1.5em;
+            color: #f76531;
+        }
+        .order-price {
+            font-size: 1.5em;
+            color: #f76531;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #f76531;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .order-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .order-item h4 {
+            margin: 0;
+            color: #333;
+        }
+        .order-item p {
+            margin: 5px 0;
+            color: #f76531;
+        }
+    </style>
+</head>
+<body>
+
+<div class="order-details">
+    <h2>Детали заказа</h2>
+    <p><strong>Статус заказа:</strong> <span class="order-status" th:text="${order.orderStatus.name}"></span></p>
+    <p><strong>Сумма заказа:</strong> <span class="order-price" th:text="${order.totalPrice}"></span></p>
+    <p><strong>Дата создания:</strong> <span th:text="${order.formattedCreationDateTime}"></span></p>
+    <p><strong>Комментарий:</strong> <span th:text="${order.comment}"></span></p>
+
+    <div th:each="item : ${order.orderItems}" class="order-item">
+        <h4 th:text="${item.product.itemName}"></h4>
+        <p><strong>Количество:</strong> <span th:text="${item.quantity}"></span></p>
+        <p><strong>Цена:</strong> <span th:text="${item.price}"></span></p>
+    </div>
+
+    <a class="back-button" th:href="@{/customer/profile}">Назад в личный кабинет</a>
+</div>
+
+</body>
+</html>

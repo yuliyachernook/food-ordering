@@ -130,10 +130,12 @@
             <div class="cart-item">
                 <div class="cart-item-details">
                     <h3 th:text="${orderItem.product.itemName}"></h3>
-                    <p class="cart-item-price-product" th:text="${#numbers.formatDecimal((orderItem.product.discountPercentage > 0 ? (orderItem.product.price - (orderItem.product.price * orderItem.product.discountPercentage / 100)) : orderItem.product.price) * orderItem.quantity, 0, 2)}"></p>
-                    <p class="cart-item-quantity" th:text="'Количество: ' + ${orderItem.quantity}"></p>
+                    <p class="cart-item-price-product"  th:text="${#numbers.formatDecimal((orderItem.product.discountPercentage > 0 ? (orderItem.product.price - (orderItem.product.price * orderItem.product.discountPercentage / 100)) : orderItem.product.price) * orderItem.quantity, 0, 2)}"></p>
+                    <p class="cart-item-quantity"  th:text="'Количество: ' + ${orderItem.quantity}"></p>
                 </div>
-                <input type="hidden" th:field="*{orderItems[__${iterStat.index}__].product.uuid}" /> <!-- ID продукта -->
+                <input type="hidden" th:field="*{orderItems[__${iterStat.index}__].product.uuid}" />
+                <input type="hidden" th:field="*{orderItems[__${iterStat.index}__].price}" />
+                <input type="hidden" th:field="*{orderItems[__${iterStat.index}__].quantity}" />
             </div>
         </div>
 

@@ -4,6 +4,7 @@ import by.ita.chernook.dto.enums.OrderStatusEnum;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Order {
     @JoinColumn(name = "deliveryAddressUuid")
     private DeliveryAddress deliveryAddress;
 
-    private double totalPrice;
+    private BigDecimal totalPrice;
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus;
     private String comment;

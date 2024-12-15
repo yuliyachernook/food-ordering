@@ -3,6 +3,7 @@ package by.ita.chernook.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Customer {
     private String phoneNumber;
     private String email;
     private ZonedDateTime creationDateTime;
-    private double balance;
+    private BigDecimal balance;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "userUuid")

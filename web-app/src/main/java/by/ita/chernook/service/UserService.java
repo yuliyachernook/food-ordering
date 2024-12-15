@@ -1,5 +1,6 @@
 package by.ita.chernook.service;
 
+import by.ita.chernook.dto.CouponWebDto;
 import by.ita.chernook.dto.CustomerWebDto;
 import by.ita.chernook.dto.UserWebDto;
 import by.ita.chernook.mapper.CustomerMapper;
@@ -34,7 +35,11 @@ public class UserService {
     }
 
     public User findUserByLogin(String login) {
-        return userMapper.toEntity(restTemplate.getForObject(REQUEST_READ_USER_BY_LOGIN + login, UserWebDto.class));
+        try {
+            return userMapper.toEntity(restTemplate.getForObject(REQUEST_READ_USER_BY_LOGIN + login, UserWebDto.class));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Customer findCustomerByUserId(UUID id) {

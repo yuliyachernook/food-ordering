@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,12 +28,24 @@ public class CustomerService {
 
     private final RestTemplate restTemplate;
     private final CustomerMapper customerMapper;
+    private final UserService userService;
 
     public Customer createCustomer(Customer customer) {
+        if (userService.findUserByLogin(customer.getUser().getLogin()) != null) {
+            throw new IllegalStateException("User with this login already exists");
+        }
         customer.setCart(new Cart());
+        customer.setBalance(BigDecimal.valueOf(0));
         customer.getUser().setUserRoleEnum(UserRoleEnum.CUSTOMER);
         CustomerDatabaseDto customerDatabaseDto = customerMapper.toDatabaseDTO(customer);
         return customerMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, customerDatabaseDto, CustomerDatabaseDto.class));
+    }
+
+    public Customer updateCustomer(Customer customer) {
+        Customer existingCustomer = findCustomerById(customer.getUuid());
+        customer.setUser(existingCustomer.getUser());
+        customer.setCart(existingCustomer.getCart());
+        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
     }
 
     public Customer findCustomerById(UUID uuid) {
@@ -55,6 +68,12 @@ public class CustomerService {
     public Customer addAddress(UUID customerId, DeliveryAddress deliveryAddress) {
         Customer customer = findCustomerById(customerId);
         customer.getDeliveryAddresses().add(deliveryAddress);
+        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
+    }
+
+    public Customer rechargeBalance(UUID customerId) {
+        Customer customer = findCustomerById(customerId);
+        customer.setBalance(customer.getBalance().add(BigDecimal.valueOf(100)));
         return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
     }
 }

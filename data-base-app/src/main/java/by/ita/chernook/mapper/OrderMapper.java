@@ -29,6 +29,7 @@ public class OrderMapper {
                 .totalPrice(order.getTotalPrice())
                 .orderStatus(order.getOrderStatus())
                 .comment(order.getComment())
+                .creationDateTime(order.getCreationDateTime())
                 .build();
     }
 
@@ -45,6 +46,7 @@ public class OrderMapper {
                 .totalPrice(orderDto.getTotalPrice())
                 .orderStatus(orderDto.getOrderStatus())
                 .comment(orderDto.getComment())
+                .creationDateTime(orderDto.getCreationDateTime())
                 .build();
     }
 }

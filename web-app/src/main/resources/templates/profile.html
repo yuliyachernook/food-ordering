@@ -28,7 +28,7 @@
         .form-group {
             margin-bottom: 15px;
         }
-        button {
+        button, .button-details {
             cursor: pointer;
             background-color: #f76531;
             color: white;
@@ -42,6 +42,10 @@
             background-color: #CB542A;
         }
 
+        .button-details:hover {
+            background-color: #CB542A;
+        }
+
          .coupon-list {
             display: flex;
             flex-direction: row;
@@ -52,19 +56,13 @@
             background-color: #ffffff;
             border: 1px solid #d1d1d1;
             border-radius: 10px;
-            margin: 10px;
-            width: 250px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
             transition: transform 0.2s;
-        }
-
-        .coupon:hover {
-            transform: scale(1.02);
         }
 
         .coupon-header {
             background-color:#D8D2CF;
-            color: white;
+            color: black;
             text-align: center;
             padding: 10px;
             border-bottom: 1px solid #d1d1d1;
@@ -77,7 +75,7 @@
         }
 
         .coupon-body {
-            padding: 20px;
+            padding: 10px;
         }
 
         .coupon-code {
@@ -116,6 +114,31 @@
             margin-top: 20px;
         }
 
+        .order-card {
+    background-color: #ffffff;
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-details {
+    flex-grow: 1; /* Позволяет этому блоку занимать доступное пространство */
+}
+
+.order-details h4 {
+    margin: 0;
+    color: #f76531; /* Цвет заголовка */
+}
+
+.order-details p {
+    margin: 5px 0;
+    color: #555;
+}
+
         .btn-danger {
             background-color: #dc3545;
             border: none;
@@ -126,7 +149,8 @@
 
         .btn-secondary {
             background-color: #817C79;
-            color: #810E16;
+            color: white;
+            margin-top: 10px;
         }
         .btn-secondary:hover {
             background-color: #6A6868;
@@ -144,27 +168,73 @@
                 button.style.display = "block"; // Показываем кнопку
             }
         }
+
+         function toggleEdit() {
+            var editForm = document.getElementById("editForm");
+            var editButton = document.getElementById("editButton");
+            var userInfo = document.getElementById("userInfo");
+
+            if (editForm.style.display === "none") {
+                editForm.style.display = "block"; // Показываем форму редактирования
+                editButton.style.display = "none"; // Скрываем кнопку редактирования
+                userInfo.style.display = "none"; // Скрываем информацию о пользователе
+            } else {
+                editForm.style.display = "none"; // Скрываем форму редактирования
+                editButton.style.display = "block"; // Показываем кнопку редактирования
+                userInfo.style.display = "block"; // Показываем информацию о пользователе
+            }
+        }
     </script>
 </head>
 <body>
 <div class="container">
     <h1>Личный кабинет</h1>
 
-    <div>
-        <h2>Информация о пользователе</h2>
+    <h2>Информация о пользователе</h2>
+    <div id="userInfo">
         <p><strong>Имя:</strong> <span th:text="${customer.firstName}"></span></p>
         <p><strong>Фамилия:</strong> <span th:text="${customer.lastName}"></span></p>
-        <p><strong> Телефон:</strong> <span th:text="${customer.phoneNumber}"></span></p>
+        <p><strong>Телефон:</strong> <span th:text="${customer.phoneNumber}"></span></p>
         <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
+    </div>
+    <form th:action="@{/customer/update}" th:method="post" id="editForm" style="display: none;">
+        <input type="hidden" th:field="${customer.uuid}">
+        <input type="hidden" th:field="${customer.balance}">
+
+        <div class="form-group">
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" class="form-control" th:field="${customer.firstName}" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" class="form-control" th:field="${customer.lastName}" required>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Телефон:</label>
+            <input type="text" id="phoneNumber" class="form-control" th:field="${customer.phoneNumber}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="form-control" th:field="${customer.email}" required>
+        </div>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+    <button id="editButton" class="btn button-details" onclick="toggleEdit()">Редактировать</button>
+
+
+    <div>
+        <h2>Пополнение баланса</h2>
         <p><strong>Ваш баланс:</strong> <span th:text="${customer.balance}"></span></p>
+        <form th:action="@{/customer/recharge/balance}" th:method="post">
+            <button type="submit">Пополнить баланс</button>
+        </form>
     </div>
 
     <div class="card">
         <div class="card-body">
             <h2>Мои адреса доставки</h2>
             <ul class="address-list">
-                <span th:if="${#lists.isEmpty(customer.deliveryAddresses)}">Нет адресов доставки</span>
-                <li th:each="address : ${customer.deliveryAddresses}">
+                <span th:if="${#lists.isEmpty(customer.deliveryAddresses)}">Вы еще не добавили адреса доставки. Пожалуйста, добавьте, чтобы начать заказывать!</span>                <li th:each="address : ${customer.deliveryAddresses}">
                     <span th:text="${address.city} + ', ' + ${address.street} + ', ' + ${address.house} + (address.apartment != null ? ', кв. ' + ${address.apartment} : '')"></span>
                     <form th:action="@{/customer/delete/delivery/address(deliveryAddressId=${address.uuid})}" th:method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
@@ -195,18 +265,19 @@
     </div>
 
     <div>
-        <h2 th:if="${not orders.empty}">Мои заказы</h2>
-        <ul class="order-list">
-            <span th:if="${#lists.isEmpty(orders)}">Нет заказов</span>
-            <li th:each="order : ${orders}">
-                <span th:text="${order.totalPrice}"></span>
-                <span th:text="${order.creationDateTime}"></span>
-                <span th:text="${order.orderStatus.name}"></span>
-<!--                <form th:action="@{/order/details(orderId=${order.uuid})}" th:method="get" style="display:inline;">-->
-<!--                    <button type="submit" class="btn btn-custom btn-sm">Детали</button>-->
-<!--                </form>-->
-            </li>
-        </ul>
+        <h2>Мои заказы</h2>
+        <span th:if="${#lists.isEmpty(orders)}">У вас пока нет заказов. Закажите что-то вкусное прямо сейчас!</span>
+        <div class="order-list">
+            <div th:each="order : ${orders}" class="order-card">
+                <div class="order-details">
+                    <span hidden th:text="${order.uuid}"></span>
+                    <h4 th:text="${order.orderStatus.name}"></h4>
+                    <p><strong>Дата заказа:</strong> <span th:text="${order.formattedCreationDateTime}"></span></p>
+                    <p><strong>Сумма:</strong> <span th:text="${order.totalPrice}"></span></p>
+                </div>
+                <a th:href="@{/order/details(orderId=${order.uuid})}" class="btn btn-custom btn-sm button-details">Детали</a>
+            </div>
+        </div>
     </div>
 
     <div>

@@ -30,6 +30,13 @@ public class CustomerController {
         return customerMapper.toWebDTO(insertedCustomer);
     }
 
+    @PostMapping("/update")
+    public CustomerWebDto update(@RequestBody CustomerWebDto customerWebDto) {
+        Customer customer = customerMapper.toEntity(customerWebDto);
+        Customer updatedCustomer = customerService.updateCustomer(customer);
+        return customerMapper.toWebDTO(updatedCustomer);
+    }
+
     @GetMapping("/read")
     public CustomerWebDto read(@RequestParam UUID uuid) {
         Customer customer = customerService.findCustomerById(uuid);
@@ -38,8 +45,14 @@ public class CustomerController {
 
     @PostMapping("/add/address")
     public CustomerWebDto addAddress(@RequestParam UUID uuid, @RequestBody DeliveryAddressWebDto deliveryAddressWebDto) {
-        Customer insertedCustomer = customerService.addAddress(uuid, deliveryAddressMapper.toEntity(deliveryAddressWebDto));
-        return customerMapper.toWebDTO(insertedCustomer);
+        Customer customer = customerService.addAddress(uuid, deliveryAddressMapper.toEntity(deliveryAddressWebDto));
+        return customerMapper.toWebDTO(customer);
+    }
+
+    @PostMapping("/recharge/balance")
+    public CustomerWebDto rechargeBalance(@RequestParam UUID uuid) {
+        Customer customer = customerService.rechargeBalance(uuid);
+        return customerMapper.toWebDTO(customer);
     }
 
     @GetMapping("/read/user/{userUuid}")

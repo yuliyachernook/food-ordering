@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Customer {
     private String phoneNumber;
     private String email;
     private ZonedDateTime creationDateTime;
-    private double balance;
+    private BigDecimal balance;
 
     private User user;
     private List<DeliveryAddress> deliveryAddresses;

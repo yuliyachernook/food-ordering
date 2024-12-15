@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class OrderService {
     private static final String REQUEST_UPDATE_ORDER = "/order/update";
     private static final String REQUEST_READ = "/order/read?uuid=%s";
     private static final String REQUEST_READ_ALL = "/order/read/all";
+    private static final String REQUEST_READ_ALL_BY_CUSTOMER_UUID = "/order/read/all/customer/";
 
     private final OrderMapper orderMapper;
     private final RestTemplate restTemplate;
@@ -30,11 +32,11 @@ public class OrderService {
         return orderMapper.toEntity(restTemplate.postForObject(REQUEST_BUILD_ORDER + "customerUuid=" + customerUuid, null, OrderWebDto.class));
     }
 
-    public Order createOrderForCustomer(Order order, UUID customerUuid, Double discountedTotalPrice) {
+    public Order createOrderForCustomer(Order order, UUID customerUuid, BigDecimal discountedTotalPrice) {
         if (discountedTotalPrice != null) {
             order.setTotalPrice(discountedTotalPrice);
         }
-        return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER + "customerUuid=" +customerUuid, orderMapper.toWebDTO(order), OrderWebDto.class));
+        return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER + "customerUuid=" + customerUuid, orderMapper.toWebDTO(order), OrderWebDto.class));
     }
 
     public Order updateOrder(Order order) {
@@ -53,7 +55,7 @@ public class OrderService {
     }
 
     public List<Order> readAllOrdersByCustomerUuid(UUID customerUuid) {
-        ResponseEntity<List<OrderWebDto>> response = restTemplate.exchange(REQUEST_READ_ALL, HttpMethod.GET, null, new ParameterizedTypeReference<List<OrderWebDto>>(){});
+        ResponseEntity<List<OrderWebDto>> response = restTemplate.exchange(REQUEST_READ_ALL_BY_CUSTOMER_UUID + customerUuid, HttpMethod.GET, null, new ParameterizedTypeReference<List<OrderWebDto>>(){});
         return response.getBody().stream()
                 .map(orderMapper::toEntity)
                 .collect(Collectors.toList());

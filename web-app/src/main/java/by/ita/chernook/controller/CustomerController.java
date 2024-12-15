@@ -1,9 +1,6 @@
 package by.ita.chernook.controller;
 
-import by.ita.chernook.dto.CouponWebDto;
-import by.ita.chernook.dto.CustomerWebDto;
-import by.ita.chernook.dto.DeliveryAddressWebDto;
-import by.ita.chernook.dto.OrderWebDto;
+import by.ita.chernook.dto.*;
 import by.ita.chernook.mapper.CouponMapper;
 import by.ita.chernook.mapper.CustomerMapper;
 import by.ita.chernook.mapper.DeliveryAddressMapper;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +39,8 @@ public class CustomerController {
         CustomerWebDto customer = customerMapper.toWebDTO(userService.findCustomerById(customUserDetails.getCustomerUuid()));
         List<OrderWebDto> orders = orderService.readAllOrdersByCustomerUuid(customer.getUuid()).stream()
                 .map(orderMapper::toWebDTO)
+                .sorted(Comparator.comparing(OrderWebDto::getCreationDateTime).reversed()) // Сортируем по дате создания в обратном порядке
+                .limit(5)
                 .collect(Collectors.toList());
         List<CouponWebDto> coupons = couponService.readAllGlobalCoupons().stream()
                 .map(couponMapper::toWebDTO)
@@ -64,12 +64,15 @@ public class CustomerController {
         return "redirect:/customer/profile";
     }
 
-    @GetMapping("/all")
-    public String mainPage(Model model) {
-        List<CustomerWebDto> products = customerService.readAllCustomers().stream()
-                .map(customerMapper::toWebDTO)
-                .collect(Collectors.toList());
-        model.addAttribute("customers", products);
-        return "customers";
+    @PostMapping("/recharge/balance")
+    public String rechargeBalance(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        customerService.rechargeBalance(customUserDetails.getCustomerUuid());
+        return "rechargeSuccess";
+    }
+
+    @PostMapping("update")
+    public String updateProduct(@ModelAttribute CustomerWebDto customerWebDto) {
+        CustomerWebDto customer = customerMapper.toWebDTO(customerService.updateCustomer(customerMapper.toEntity(customerWebDto)));
+        return "redirect:/customer/profile";
     }
 }

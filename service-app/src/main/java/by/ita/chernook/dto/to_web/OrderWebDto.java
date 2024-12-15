@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class OrderWebDto {
     private CustomerWebDto customer;
     private List<OrderItemWebDto> orderItems;
     private DeliveryAddressWebDto deliveryAddress;
-    private double totalPrice;
+    private BigDecimal totalPrice;
     private OrderStatusEnum orderStatus;
     private ZonedDateTime creationDateTime;
     private String comment;

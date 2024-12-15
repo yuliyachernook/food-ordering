@@ -5,6 +5,7 @@ import by.ita.chernook.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     public Cart insertCart(Cart cart) {
+        cart.setCreationDateTime(ZonedDateTime.now());
         return cartRepository.save(cart);
     }
 

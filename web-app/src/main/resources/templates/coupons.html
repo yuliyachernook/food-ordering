@@ -67,7 +67,10 @@
             width: 15%;
         }
         .amount {
-            width: 15%;
+            width: 10%;
+        }
+        .uses {
+            width: 10%;
         }
     </style>
 </head>
@@ -80,7 +83,7 @@
         <th class="description">Описание</th>
         <th class="percentage">Тип скидки</th>
         <th class="amount">Скидка</th>
-        <th></th>
+        <th class="uses">Количество</th>
         <th></th>
     </tr>
     </thead>
@@ -97,7 +100,7 @@
         <td><span th:text="${coupon.description}"></span></td>
         <td><span th:text="${coupon.couponType}"></span></td>
         <td><span th:text="${coupon.discount}"></span></td>
-        <td><a th:href="@{/admin/coupons/update(uuid=${coupon.uuid})}" class="btn btn-primary">Редактировать</a></td>
+        <td><span th:text="${coupon.availableUses}"></span></td>
         <td>
             <form th:action="@{/coupons/products/delete(uuid=${coupon.uuid})}" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-danger">Удалить</button>

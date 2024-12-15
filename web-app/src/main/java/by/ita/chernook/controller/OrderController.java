@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
@@ -42,7 +44,7 @@ public class OrderController {
         model.addAttribute("customer", customerMapper.toWebDTO(customer));
         model.addAttribute("order", orderMapper.toWebDTO(order));
 
-        Double discountedTotalPrice = (Double) session.getAttribute("discountedTotalPrice");
+        BigDecimal discountedTotalPrice = (BigDecimal) session.getAttribute("discountedTotalPrice");
         if (discountedTotalPrice != null) {
             model.addAttribute("discountedTotalPrice", discountedTotalPrice);
         }
@@ -64,7 +66,7 @@ public class OrderController {
     @PostMapping("/confirm")
     public String confirmOrder( @AuthenticationPrincipal CustomUserDetails customUserDetails, @ModelAttribute OrderWebDto orderWebDto, Model model, HttpSession httpSession) {
         String code = (String) httpSession.getAttribute("coupon");
-        Double discountedTotalPrice = (Double) httpSession.getAttribute("discountedTotalPrice");
+        BigDecimal discountedTotalPrice = (BigDecimal) httpSession.getAttribute("discountedTotalPrice");
 
         if (code != null) {
             Coupon appliedCoupon = couponService.applyCoupon(code);
@@ -96,15 +98,7 @@ public class OrderController {
             return "redirect:/order";
         }
 
-        double newTotalPrice = Double.parseDouble(totalPrice);
-
-        if (coupon.getCouponType().equals(CouponTypeEnum.FIXED)) {
-            newTotalPrice = newTotalPrice - coupon.getDiscount();
-        } else if (coupon.getCouponType().equals(CouponTypeEnum.PERCENT)) {
-            newTotalPrice = newTotalPrice - (newTotalPrice * coupon.getDiscount() / 100);
-        }
-
-        if (newTotalPrice < 0) newTotalPrice = 0;
+        BigDecimal newTotalPrice = getNewTotalPrice(totalPrice, coupon);
 
         session.setAttribute("coupon", code);
         session.setAttribute("successMessage", "Промокод успешно применен :)");
@@ -112,9 +106,32 @@ public class OrderController {
         return "redirect:/order";
     }
 
+
     @GetMapping("success")
     public String showSuccessPage() {
         return "orderSuccess";
     }
 
+    @GetMapping("/details")
+    public String getOrderDetails(@RequestParam("orderId") String orderId, Model model) {
+        OrderWebDto orderWebDto = orderMapper.toWebDTO(orderService.readOrderById(orderId));
+        model.addAttribute("order", orderWebDto);
+        return "orderDetails";
+    }
+
+    private BigDecimal getNewTotalPrice(String totalPrice, Coupon coupon) {
+        BigDecimal newTotalPrice = new BigDecimal(totalPrice);
+
+        if (coupon.getCouponType().equals(CouponTypeEnum.FIXED)) {
+            newTotalPrice = newTotalPrice.subtract(BigDecimal.valueOf(coupon.getDiscount()));
+        } else if (coupon.getCouponType().equals(CouponTypeEnum.PERCENT)) {
+            BigDecimal discount = newTotalPrice.multiply(BigDecimal.valueOf(coupon.getDiscount())).divide(BigDecimal.valueOf(100));
+            newTotalPrice = newTotalPrice.subtract(discount);
+        }
+
+        if (newTotalPrice.compareTo(BigDecimal.ZERO) < 0) {
+            newTotalPrice = BigDecimal.ZERO;
+        }
+        return newTotalPrice;
+    }
 }

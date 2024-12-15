@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class CustomerWebDto {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private double balance;
+    private BigDecimal balance;
 
     private User user;
     private List<DeliveryAddressWebDto> deliveryAddresses;
