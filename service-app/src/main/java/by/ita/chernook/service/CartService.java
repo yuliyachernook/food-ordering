@@ -26,8 +26,7 @@ public class CartService {
     }
 
     public Cart findCartById(UUID cartUuid) {
-        String url = String.format(REQUEST_READ, cartUuid);
-        return cartMapper.toEntity(restTemplate.getForObject(url, CartDatabaseDto.class));
+        return cartMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, cartUuid), CartDatabaseDto.class));
     }
 
     public void deleteCart(UUID cartUuid) {

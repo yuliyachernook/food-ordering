@@ -34,7 +34,9 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute CustomerWebDto userWebDto, Model model) {
-        try {  customerService.createCustomer(customerMapper.toEntity(userWebDto)); }
+        try {
+            customerService.createCustomer(customerMapper.toEntity(userWebDto));
+        }
         catch (Exception e) {
             if (e.getMessage().contains("User with this login already exists")) {
                 model.addAttribute("user", new CustomerWebDto());

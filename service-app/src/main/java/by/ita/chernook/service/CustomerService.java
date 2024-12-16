@@ -25,6 +25,7 @@ public class CustomerService {
     private static final String REQUEST_READ = "/customer/read?uuid=%s";
     private static final String REQUEST_READ_BY_USER_UUID = "/customer/read/user/%s";
     private static final String REQUEST_READ_ALL = "/customer/read/all";
+    private static final String REQUEST_DELETE = "/delivery/address/delete?uuid=%s";
 
     private final RestTemplate restTemplate;
     private final CustomerMapper customerMapper;
@@ -82,4 +83,7 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteAddress(UUID uuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
+    }
 }

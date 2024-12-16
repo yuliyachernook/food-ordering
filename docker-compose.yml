@@ -30,6 +30,8 @@ services:
 
   data-base-app-1:
     build: ./data-base-app
+    ports:
+      - "8201:8101"
     networks:
       - app-network
 

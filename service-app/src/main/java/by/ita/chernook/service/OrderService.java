@@ -38,7 +38,8 @@ public class OrderService {
         if (order.getTotalPrice().compareTo(customer.getBalance()) > 0) {
             throw new IllegalStateException("Insufficient funds");
         }
-
+        customer.setBalance(customer.getBalance().subtract(order.getTotalPrice()));
+        customerService.updateCustomer(customer);
         OrderDatabaseDto orderDatabaseDto = orderMapper.toDatabaseDTO(order);
         return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER, orderDatabaseDto, OrderDatabaseDto.class));
     }

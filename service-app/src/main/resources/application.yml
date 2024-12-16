@@ -1,2 +1,6 @@
 server:
   port: 8111
+
+database:
+  api:
+    base-url: http://nginx/database

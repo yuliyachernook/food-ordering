@@ -6,7 +6,6 @@ import by.ita.chernook.mapper.CustomerMapper;
 import by.ita.chernook.mapper.DeliveryAddressMapper;
 import by.ita.chernook.model.Customer;
 import by.ita.chernook.service.CustomerService;
-import by.ita.chernook.service.DeliveryAddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final DeliveryAddressService deliveryAddressService;
     private final CustomerMapper customerMapper;
     private final DeliveryAddressMapper deliveryAddressMapper;
 
@@ -70,6 +68,6 @@ public class CustomerController {
 
     @DeleteMapping("/delete")
     public void deleteAddress(@RequestParam UUID uuid) {
-        deliveryAddressService.deleteAddress(uuid);
+        customerService.deleteAddress(uuid);
     }
 }
