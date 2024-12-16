@@ -1,5 +1,6 @@
 package by.ita.chernook;
 
+import by.ita.chernook.dto.enums.CouponTypeEnum;
 import by.ita.chernook.model.Coupon;
 import by.ita.chernook.repository.CouponRepository;
 import by.ita.chernook.service.CouponService;
@@ -26,7 +27,7 @@ public class CouponServiceTest extends TestUtils {
 
     @Test
     void insertCoupon_then_return() {
-        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.save(testCoupon)).thenReturn(testCoupon);
 
@@ -40,7 +41,7 @@ public class CouponServiceTest extends TestUtils {
     @Test
     void updateCoupon_then_return() {
         UUID couponUuid = UUID.randomUUID();
-        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.existsById(couponUuid)).thenReturn(true);
         when(couponRepository.save(testCoupon)).thenReturn(testCoupon);
@@ -56,7 +57,7 @@ public class CouponServiceTest extends TestUtils {
     @Test
     void updateCoupon_then_throws_NoSuchElementException() {
         UUID couponUuid = UUID.randomUUID();
-        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.existsById(couponUuid)).thenReturn(false);
 
@@ -69,7 +70,7 @@ public class CouponServiceTest extends TestUtils {
     @Test
     void deleteCoupon_then_return() {
         UUID couponUuid = UUID.randomUUID();
-        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.findById(couponUuid)).thenReturn(Optional.of(testCoupon));
         doNothing().when(couponRepository).deleteById(couponUuid);
@@ -97,7 +98,7 @@ public class CouponServiceTest extends TestUtils {
     @Test
     void findCouponById_then_return() {
         UUID couponUuid = UUID.randomUUID();
-        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(couponUuid, "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.findById(couponUuid)).thenReturn(Optional.of(testCoupon));
 
@@ -122,7 +123,7 @@ public class CouponServiceTest extends TestUtils {
     @Test
     void findCouponByCode_then_return() {
         String code = "123";
-        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", code, 0.0, 55.0);
+        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", code, CouponTypeEnum.FIXED, 5, 5);
 
         when(couponRepository.findByCode(code)).thenReturn(Optional.of(testCoupon));
 
@@ -146,9 +147,9 @@ public class CouponServiceTest extends TestUtils {
 
     @Test
     void findAlL_then_return() {
-        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "12345", 0.0, 55.0);
-        Coupon testCoupon2 = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "54321", 0.0, 15.0);
-        List<Coupon> testList = new ArrayList<>(Arrays.asList(testCoupon2, testCoupon2));
+        Coupon testCoupon = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "12345", CouponTypeEnum.FIXED, 5, 5);
+        Coupon testCoupon2 = buildCoupon(UUID.randomUUID(), "Test coupon", "Test desctiption", "54321", CouponTypeEnum.FIXED, 2, 10);
+        List<Coupon> testList = new ArrayList<>(Arrays.asList(testCoupon, testCoupon2));
 
         when(couponRepository.findAll()).thenReturn(testList);
 

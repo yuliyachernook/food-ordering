@@ -21,15 +21,13 @@ public class CustomerController {
 
     @PostMapping("/create")
     public CustomerDto create(@RequestBody CustomerDto customerDto) {
-        Customer customer = customerMapper.toEntity(customerDto);
-        Customer insertedCustomer = customerService.insertCustomer(customer);
+        Customer insertedCustomer = customerService.insertCustomer(customerMapper.toEntity(customerDto));
         return customerMapper.toDTO(insertedCustomer);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public CustomerDto update(@RequestBody CustomerDto customerDto) {
-        Customer customer = customerMapper.toEntity(customerDto);
-        Customer updatedCustomer = customerService.updateCustomer(customer);
+        Customer updatedCustomer = customerService.updateCustomer(customerMapper.toEntity(customerDto));
         return customerMapper.toDTO(updatedCustomer);
     }
 

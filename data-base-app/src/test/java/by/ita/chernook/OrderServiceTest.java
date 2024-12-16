@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +33,7 @@ class OrderServiceTest extends TestUtils {
     @Test
     void insertOrder_then_return() {
         Order testOrder = buildOrder(UUID.randomUUID(), List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2));
+                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(orderRepository.save(testOrder)).thenReturn(testOrder);
 
@@ -47,7 +48,7 @@ class OrderServiceTest extends TestUtils {
     void updateOrder_then_return() {
         UUID orderUuid = UUID.randomUUID();
         Order testOrder = buildOrder(orderUuid, List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2));
+                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(orderRepository.existsById(orderUuid)).thenReturn(true);
         when(orderRepository.save(testOrder)).thenReturn(testOrder);
@@ -64,7 +65,7 @@ class OrderServiceTest extends TestUtils {
     void updateOrder_then_throws_NoSuchElementException() {
         UUID orderUuid = UUID.randomUUID();
         Order testOrder = buildOrder(orderUuid, List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(55.2));
+                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(55.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(orderRepository.existsById(orderUuid)).thenReturn(false);
 
@@ -78,7 +79,7 @@ class OrderServiceTest extends TestUtils {
     void deleteOrder_then_return() {
         UUID orderUuid = UUID.randomUUID();
         Order testOrder = buildOrder(orderUuid, List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(55.2));
+                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(55.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(orderRepository.findById(orderUuid)).thenReturn(Optional.of(testOrder));
         doNothing().when(orderRepository).deleteById(orderUuid);
@@ -107,7 +108,7 @@ class OrderServiceTest extends TestUtils {
     void findOrderById_then_return() {
         UUID orderUuid = UUID.randomUUID();
         Order testOrder = buildOrder(orderUuid, List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2));
+                OrderStatusEnum.NEW, "Test comment", BigDecimal.valueOf(25.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         when(orderRepository.findById(orderUuid)).thenReturn(Optional.of(testOrder));
 
@@ -132,9 +133,9 @@ class OrderServiceTest extends TestUtils {
     @Test
     void findAll_then_return() {
         Order testOrder = buildOrder(UUID.randomUUID(), List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.PROCESSING, "Test comment", BigDecimal.valueOf(25.2));
+                OrderStatusEnum.PROCESSING, "Test comment", BigDecimal.valueOf(25.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
         Order testOrder2 = buildOrder(UUID.randomUUID(), List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment2", BigDecimal.valueOf(48.8));
+                OrderStatusEnum.NEW, "Test comment2", BigDecimal.valueOf(48.8), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
         List<Order> testList = new ArrayList<>(Arrays.asList(testOrder, testOrder2));
 
         when(orderRepository.findAll()).thenReturn(testList);
@@ -150,9 +151,9 @@ class OrderServiceTest extends TestUtils {
     void findAlLByCustomerUuid_then_return() {
         UUID customerUUid = UUID.randomUUID();
         Order testOrder = buildOrder(UUID.randomUUID(), List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.PROCESSING, "Test comment", BigDecimal.valueOf(25.2));
+                OrderStatusEnum.PROCESSING, "Test comment", BigDecimal.valueOf(25.2), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
         Order testOrder2 = buildOrder(UUID.randomUUID(), List.of(new OrderItem()), new DeliveryAddress(), new Customer(),
-                OrderStatusEnum.NEW, "Test comment2", BigDecimal.valueOf(48.8));
+                OrderStatusEnum.NEW, "Test comment2", BigDecimal.valueOf(48.8), ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
         List<Order> testList = new ArrayList<>(Arrays.asList(testOrder, testOrder2));
 
         when(orderRepository.findAllByCustomerUuid(customerUUid)).thenReturn(testList);

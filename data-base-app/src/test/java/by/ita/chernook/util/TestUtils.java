@@ -1,6 +1,7 @@
 package by.ita.chernook.util;
 
 import by.ita.chernook.dto.enums.CategoryEnum;
+import by.ita.chernook.dto.enums.CouponTypeEnum;
 import by.ita.chernook.dto.enums.OrderStatusEnum;
 import by.ita.chernook.dto.enums.UserRoleEnum;
 import by.ita.chernook.model.*;
@@ -18,6 +19,7 @@ public abstract class TestUtils {
                 .login(login)
                 .password(password)
                 .userRoleEnum(userRole)
+                .creationDateTime(creationDateTime)
                 .build();
     }
 
@@ -35,7 +37,7 @@ public abstract class TestUtils {
     }
 
     protected Order buildOrder(UUID uuid, List<OrderItem> orderItems, DeliveryAddress deliveryAddress, Customer customer, OrderStatusEnum orderStatus,
-                               String comment, BigDecimal totalPrice) {
+                               String comment, BigDecimal totalPrice, ZonedDateTime creationDateTime) {
         return Order.builder()
                 .uuid(uuid)
                 .orderItems(orderItems)
@@ -44,6 +46,7 @@ public abstract class TestUtils {
                 .orderStatus(orderStatus)
                 .comment(comment)
                 .totalPrice(totalPrice)
+                .creationDateTime(creationDateTime)
                 .build();
     }
 
@@ -80,21 +83,24 @@ public abstract class TestUtils {
                 .build();
     }
 
-    protected Coupon buildCoupon(UUID uuid, String name, String description, String code, Double discountPercentage,
-                                 Double discountAmount) {
+    protected Coupon buildCoupon(UUID uuid, String name, String description, String code, CouponTypeEnum couponType, int discount,
+                                 int availableUses) {
         return Coupon.builder()
                 .uuid(uuid)
                 .name(name)
                 .description(description)
                 .code(code)
+                .couponType(couponType)
+                .discount(discount)
+                .availableUses(availableUses)
                 .build();
     }
 
     protected Cart buildCart(UUID uuid, ZonedDateTime creationDateTime) {
         return Cart.builder()
                 .uuid(uuid)
-                .creationDateTime(creationDateTime).
-                build();
+                .creationDateTime(creationDateTime)
+                .build();
     }
 
     protected CartItem buildCartItem(UUID uuid, Cart cart, Product product, int quantity) {

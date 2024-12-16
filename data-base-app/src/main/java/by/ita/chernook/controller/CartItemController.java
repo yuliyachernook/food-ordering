@@ -21,8 +21,7 @@ public class CartItemController {
 
     @PostMapping("/create")
     public CartItemDto create(@RequestBody CartItemDto cartItemDto) {
-        CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
-        CartItem insertedCartItem = cartItemService.insertCartItem(cartItem);
+        CartItem insertedCartItem = cartItemService.insertCartItem(cartItemMapper.toEntity(cartItemDto));
         return cartItemMapper.toDTO(insertedCartItem);
     }
 

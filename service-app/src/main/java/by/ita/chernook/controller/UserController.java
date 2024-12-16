@@ -1,20 +1,11 @@
 package by.ita.chernook.controller;
 
-
-import by.ita.chernook.dto.to_web.CartWebDto;
-import by.ita.chernook.dto.to_web.ProductWebDto;
 import by.ita.chernook.dto.to_web.UserWebDto;
-import by.ita.chernook.mapper.ProductMapper;
 import by.ita.chernook.mapper.UserMapper;
-import by.ita.chernook.model.Cart;
-import by.ita.chernook.model.Product;
 import by.ita.chernook.model.User;
-import by.ita.chernook.service.ProductService;
 import by.ita.chernook.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -26,8 +17,7 @@ public class UserController {
 
     @PostMapping("/create")
     public UserWebDto create(@RequestBody UserWebDto userWebDto) {
-        User user = userMapper.toEntity(userWebDto);
-        User insertedUser = userService.createUser(user);
+        User insertedUser = userService.createUser(userMapper.toEntity(userWebDto));
         return userMapper.toWebDTO(insertedUser);
     }
 

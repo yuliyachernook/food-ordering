@@ -23,7 +23,7 @@ public class CouponService {
     private static final String REQUEST_READ = "/coupon/read?uuid=%s";
     private static final String REQUEST_DELETE = "/coupon/delete?uuid=%s";
     private static final String REQUEST_READ_BY_CODE = "/coupon/read/code?code=%s";
-    private static final String REQUEST_READ_GLOBAL = "/coupon/read/all";
+    private static final String REQUEST_READ_ALL = "/coupon/read/all";
 
     private final RestTemplate restTemplate;
     private final CouponMapper couponMapper;
@@ -39,14 +39,6 @@ public class CouponService {
         return findCouponById(coupon.getUuid());
     }
 
-    public Coupon findCouponById(UUID uuid) {
-        return couponMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), CouponDatabaseDto.class));
-    }
-
-    public void deleteCoupon(UUID uuid) {
-        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
-    }
-
     public Coupon applyCoupon(String code)  {
         Coupon coupon = findCouponByCode(code);
         int couponAvailableUses = coupon.getAvailableUses();
@@ -54,8 +46,14 @@ public class CouponService {
             coupon.setAvailableUses(couponAvailableUses - 1);
             CouponDatabaseDto couponDatabaseDto = couponMapper.toDatabaseDTO(coupon);
             restTemplate.put(REQUEST_UPDATE, couponDatabaseDto, CouponDatabaseDto.class);
-           return coupon;
-        } else throw new IllegalStateException(String.format("Coupon %s is not available", code));
+            return coupon;
+        } else {
+            throw new IllegalStateException(String.format("Coupon %s is not available", code));
+        }
+    }
+
+    public Coupon findCouponById(UUID uuid) {
+        return couponMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), CouponDatabaseDto.class));
     }
 
     public Coupon findCouponByCode(String code) {
@@ -68,10 +66,14 @@ public class CouponService {
         }
     }
 
-    public List<Coupon> findAllGlobalCoupons() {
-        ResponseEntity<List<CouponDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_GLOBAL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
+    public List<Coupon> findAllCoupons() {
+        ResponseEntity<List<CouponDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_ALL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
         return response.getBody().stream()
                 .map(couponMapper::toEntity)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteCoupon(UUID uuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
     }
 }

@@ -25,12 +25,12 @@ public class CartService {
         return cartMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, cartDatabaseDto, CartDatabaseDto.class));
     }
 
-    public void deleteCart(UUID cartUuid) {
-        restTemplate.delete(String.format(REQUEST_DELETE, cartUuid));
-    }
-
     public Cart findCartById(UUID cartUuid) {
         String url = String.format(REQUEST_READ, cartUuid);
         return cartMapper.toEntity(restTemplate.getForObject(url, CartDatabaseDto.class));
+    }
+
+    public void deleteCart(UUID cartUuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, cartUuid));
     }
 }

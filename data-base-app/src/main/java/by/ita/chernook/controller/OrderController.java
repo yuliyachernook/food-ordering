@@ -21,15 +21,13 @@ public class OrderController {
 
     @PostMapping("/create")
     public OrderDto create(@RequestBody OrderDto orderDto) {
-        Order cart = orderMapper.toEntity(orderDto);
-        Order insertedOrder = orderService.insertOrder(cart);
+        Order insertedOrder = orderService.insertOrder(orderMapper.toEntity(orderDto));
         return orderMapper.toDTO(insertedOrder);
     }
 
     @PutMapping("/update")
     public OrderDto update(@RequestBody OrderDto userDto) {
-        Order order = orderMapper.toEntity(userDto);
-        Order updatedOrder = orderService.updateOrder(order);
+        Order updatedOrder = orderService.updateOrder(orderMapper.toEntity(userDto));
         return orderMapper.toDTO(updatedOrder);
     }
 

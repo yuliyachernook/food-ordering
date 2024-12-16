@@ -22,8 +22,7 @@ public class ProductController {
 
     @PostMapping("/create")
     public ProductWebDto create(@RequestBody ProductWebDto productDatabaseDto) {
-        Product product = productMapper.toEntity(productDatabaseDto);
-        Product insertedProduct = productService.createProduct(product);
+        Product insertedProduct = productService.createProduct(productMapper.toEntity(productDatabaseDto));
         return productMapper.toWebDTO(insertedProduct);
     }
 

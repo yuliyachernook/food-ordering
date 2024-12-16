@@ -21,15 +21,13 @@ public class CouponController {
 
     @PostMapping("/create")
     public CouponDto create(@RequestBody CouponDto couponDto) {
-        Coupon coupon = couponMapper.toEntity(couponDto);
-        Coupon insertedCoupon = couponService.createCoupon(coupon);
+        Coupon insertedCoupon = couponService.createCoupon(couponMapper.toEntity(couponDto));
         return couponMapper.toDTO(insertedCoupon);
     }
 
     @PutMapping("/update")
     public CouponDto update(@RequestBody CouponDto couponDto) {
-        Coupon coupon = couponMapper.toEntity(couponDto);
-        Coupon updatedCoupon = couponService.updateCoupon(coupon);
+        Coupon updatedCoupon = couponService.updateCoupon(couponMapper.toEntity(couponDto));
         return couponMapper.toDTO(updatedCoupon);
     }
 

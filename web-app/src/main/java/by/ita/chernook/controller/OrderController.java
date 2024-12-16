@@ -46,7 +46,7 @@ public class OrderController {
 
         BigDecimal discountedTotalPrice = (BigDecimal) session.getAttribute("discountedTotalPrice");
         if (discountedTotalPrice != null) {
-            model.addAttribute("discountedTotalPrice", discountedTotalPrice);
+            model.addAttribute("discountedTotalPrice", String.format("%.2f", discountedTotalPrice));
         }
         String errorMessage = (String) session.getAttribute("errorMessage");
         String successMessage = (String) session.getAttribute("successMessage");
@@ -129,8 +129,8 @@ public class OrderController {
             newTotalPrice = newTotalPrice.subtract(discount);
         }
 
-        if (newTotalPrice.compareTo(BigDecimal.ZERO) < 0) {
-            newTotalPrice = BigDecimal.ZERO;
+        if (newTotalPrice.compareTo(BigDecimal.valueOf(0)) < 0) {
+            newTotalPrice = BigDecimal.valueOf(0.01);
         }
         return newTotalPrice;
     }

@@ -1,9 +1,7 @@
 package by.ita.chernook.service;
 
-import by.ita.chernook.dto.enums.CategoryEnum;
 import by.ita.chernook.dto.enums.OrderStatusEnum;
 import by.ita.chernook.dto.to_data_base.OrderDatabaseDto;
-import by.ita.chernook.dto.to_data_base.ProductDatabaseDto;
 import by.ita.chernook.mapper.OrderMapper;
 import by.ita.chernook.model.*;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 @RequiredArgsConstructor
 @Service
 public class OrderService {
@@ -32,7 +29,6 @@ public class OrderService {
     private final RestTemplate restTemplate;
     private final CustomerService customerService;
     private final CartItemService cartItemService;
-
     private final OrderMapper orderMapper;
 
     public Order createOrder(Order order, UUID customerUuid) {
@@ -42,6 +38,7 @@ public class OrderService {
         if (order.getTotalPrice().compareTo(customer.getBalance()) > 0) {
             throw new IllegalStateException("Insufficient funds");
         }
+
         OrderDatabaseDto orderDatabaseDto = orderMapper.toDatabaseDTO(order);
         return orderMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE_ORDER, orderDatabaseDto, OrderDatabaseDto.class));
     }
@@ -50,16 +47,13 @@ public class OrderService {
         Order existingOrder = findOrderById(order.getUuid());
         existingOrder.setOrderStatus(order.getOrderStatus());
         existingOrder.setComment(order.getComment());
-        OrderDatabaseDto orderDatabaseDto = orderMapper.toDatabaseDTO(order);
+        OrderDatabaseDto orderDatabaseDto = orderMapper.toDatabaseDTO(existingOrder);
+
         restTemplate.put(REQUEST_UPDATE_ORDER, orderDatabaseDto, OrderDatabaseDto.class);
         return findOrderById(order.getUuid());
     }
 
-    public Order findOrderById(UUID uuid) {
-        return orderMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), OrderDatabaseDto.class));
-    }
-
-    public Order buildOrderFromCart(UUID customerUuid) {
+    public Order prepareOrderFromCustomerCart(UUID customerUuid) {
         Customer customer = customerService.findCustomerById(customerUuid);
         List<CartItem> cartItems = cartItemService.findAllCartItemsByCartUuid(customer.getCart().getUuid());
 
@@ -84,6 +78,10 @@ public class OrderService {
         BigDecimal totalPrice = calculateTotalPrice(orderItems);
 
         return Order.builder().customer(customer).orderItems(orderItems).totalPrice(totalPrice).build();
+    }
+
+    public Order findOrderById(UUID uuid) {
+        return orderMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), OrderDatabaseDto.class));
     }
 
     public List<Order> findAll() {

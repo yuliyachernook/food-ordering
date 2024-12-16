@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderService {
     private static final String REQUEST_CREATE_ORDER = "/order/create?";
-    private static final String REQUEST_BUILD_ORDER = "/order/build?";
+    private static final String REQUEST_BUILD_ORDER = "/order/prepare?";
     private static final String REQUEST_UPDATE_ORDER = "/order/update";
     private static final String REQUEST_READ = "/order/read?uuid=%s";
     private static final String REQUEST_READ_ALL = "/order/read/all";
-    private static final String REQUEST_READ_ALL_BY_CUSTOMER_UUID = "/order/read/all/customer/";
+    private static final String REQUEST_READ_ALL_BY_CUSTOMER_UUID = "/order/read/all/customer/%s";
 
     private final OrderMapper orderMapper;
     private final RestTemplate restTemplate;
@@ -55,7 +55,7 @@ public class OrderService {
     }
 
     public List<Order> readAllOrdersByCustomerUuid(UUID customerUuid) {
-        ResponseEntity<List<OrderWebDto>> response = restTemplate.exchange(REQUEST_READ_ALL_BY_CUSTOMER_UUID + customerUuid, HttpMethod.GET, null, new ParameterizedTypeReference<List<OrderWebDto>>(){});
+        ResponseEntity<List<OrderWebDto>> response = restTemplate.exchange(String.format(REQUEST_READ_ALL_BY_CUSTOMER_UUID, customerUuid), HttpMethod.GET, null, new ParameterizedTypeReference<List<OrderWebDto>>(){});
         return response.getBody().stream()
                 .map(orderMapper::toEntity)
                 .collect(Collectors.toList());

@@ -22,9 +22,9 @@ public class ProductService {
     private static final String REQUEST_CREATE = "/product/create";
     private static final String REQUEST_UPDATE = "/product/update";
     private static final String REQUEST_READ = "/product/read?uuid=%s";
-    private static final String REQUEST_DELETE = "/product/delete?uuid=%s";
     private static final String REQUEST_READ_ALL = "/product/read/all";
     private static final String REQUEST_READ_ALL_BY_CATEGORY = "/product/read/all/category/%s";
+    private static final String REQUEST_DELETE = "/product/delete?uuid=%s";
 
     private final RestTemplate restTemplate;
     private final ProductMapper productMapper;
@@ -40,8 +40,8 @@ public class ProductService {
         return findProductById(product.getUuid());
     }
 
-    public void deleteProduct(UUID uuid) {
-        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
+    public Product findProductById(UUID uuid) {
+        return productMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), ProductDatabaseDto.class));
     }
 
     public List<Product> findAll() {
@@ -58,7 +58,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public Product findProductById(UUID uuid) {
-        return productMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, uuid), ProductDatabaseDto.class));
+    public void deleteProduct(UUID uuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, uuid));
     }
 }

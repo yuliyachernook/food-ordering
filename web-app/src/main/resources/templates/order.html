@@ -163,7 +163,7 @@
             <strong>Итого: <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 2)}"></span></strong>
         </div>
         <div class="discounted-price" th:if="${discountedTotalPrice != null}">
-            <strong>Сумма со скидкой: <span th:text="${#numbers.formatDecimal(discountedTotalPrice, 0, 2)}"></span></strong>
+            <strong>Сумма со скидкой: <span th:text="${discountedTotalPrice}"></span></strong>
         </div>
         <label for="promoCode">Купон:</label>
         <input type="hidden" th:name="totalPrice" th:value="${order.totalPrice}" />

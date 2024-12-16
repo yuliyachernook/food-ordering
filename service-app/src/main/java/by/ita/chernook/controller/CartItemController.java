@@ -31,13 +31,8 @@ public class CartItemController {
         return cartItemMapper.toWebDTO(updatedCartItem);
     }
 
-    @DeleteMapping("/delete")
-    public void delete(@RequestParam UUID uuid) {
-        cartItemService.deleteCartItem(uuid);
-    }
-
-    @GetMapping("/read/all/customer")
-    public List<CartItemWebDto> readAll(@RequestParam UUID customerUuid) {
+    @GetMapping("/read/all/customer/{customerUuid}")
+    public List<CartItemWebDto> readAllByCustomerUuid(@PathVariable UUID customerUuid) {
         return cartItemService.findAllCartItemsByCustomerUuid(customerUuid)
                 .stream()
                 .map(cartItemMapper::toWebDTO)
@@ -45,11 +40,16 @@ public class CartItemController {
     }
 
     @GetMapping("/read/all/cart/{cartUuid}")
-    public List<CartItemWebDto> readAllCart(@PathVariable UUID cartUuid) {
+    public List<CartItemWebDto> readAllByCartUuid(@PathVariable UUID cartUuid) {
         return cartItemService.findAllCartItemsByCartUuid(cartUuid)
                 .stream()
                 .map(cartItemMapper::toWebDTO)
                 .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam UUID uuid) {
+        cartItemService.deleteCartItem(uuid);
     }
 
     @DeleteMapping("/delete/all/cart/{cartUuid}")

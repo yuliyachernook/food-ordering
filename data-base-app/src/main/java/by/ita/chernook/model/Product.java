@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -29,7 +30,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
     private int discountPercentage;
-    @Lob
     private byte[] image;
     private ZonedDateTime creationDateTime;
 

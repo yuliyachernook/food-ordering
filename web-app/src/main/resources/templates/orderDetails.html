@@ -50,7 +50,6 @@
         }
         .order-item p {
             margin: 5px 0;
-            color: #f76531;
         }
     </style>
 </head>
@@ -66,7 +65,7 @@
     <div th:each="item : ${order.orderItems}" class="order-item">
         <h4 th:text="${item.product.itemName}"></h4>
         <p><strong>Количество:</strong> <span th:text="${item.quantity}"></span></p>
-        <p><strong>Цена:</strong> <span th:text="${item.price}"></span></p>
+        <p><strong>Цена (1 шт.):</strong> <span th:text="${item.price}"></span></p>
     </div>
 
     <a class="back-button" th:href="@{/customer/profile}">Назад в личный кабинет</a>

@@ -104,7 +104,7 @@
         <div th:each="item : ${order.orderItems}" class="order-item">
             <h4 th:text="${item.product.itemName}"></h4>
             <p><strong>Количество:</strong> <span th:text="${item.quantity}"></span></p>
-            <p><strong>Цена:</strong> <span th:text="${item.price}"></span></p>
+            <p><strong>Цена (1 шт.):</strong> <span th:text="${item.price}"></span></p>
         </div>
 
         <div class="form-group">

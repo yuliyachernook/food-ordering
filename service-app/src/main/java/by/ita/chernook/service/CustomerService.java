@@ -45,7 +45,8 @@ public class CustomerService {
         Customer existingCustomer = findCustomerById(customer.getUuid());
         customer.setUser(existingCustomer.getUser());
         customer.setCart(existingCustomer.getCart());
-        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
+        restTemplate.put(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class);
+        return customer;
     }
 
     public Customer findCustomerById(UUID uuid) {
@@ -58,6 +59,22 @@ public class CustomerService {
         return customerMapper.toEntity(restTemplate.getForObject(url, CustomerDatabaseDto.class));
     }
 
+    public Customer addAddress(UUID customerId, DeliveryAddress deliveryAddress) {
+        Customer customer = findCustomerById(customerId);
+        customer.getDeliveryAddresses().add(deliveryAddress);
+
+        restTemplate.put(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class);
+        return findCustomerById(customerId);
+    }
+
+    public Customer rechargeBalance(UUID customerId) {
+        Customer customer = findCustomerById(customerId);
+        customer.setBalance(customer.getBalance().add(BigDecimal.valueOf(100)));
+
+        restTemplate.put(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class);
+        return findCustomerById(customerId);
+    }
+
     public List<Customer> findAll() {
         ResponseEntity<List<CustomerDatabaseDto>> response = restTemplate.exchange(REQUEST_READ_ALL, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
         return response.getBody().stream()
@@ -65,15 +82,4 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public Customer addAddress(UUID customerId, DeliveryAddress deliveryAddress) {
-        Customer customer = findCustomerById(customerId);
-        customer.getDeliveryAddresses().add(deliveryAddress);
-        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
-    }
-
-    public Customer rechargeBalance(UUID customerId) {
-        Customer customer = findCustomerById(customerId);
-        customer.setBalance(customer.getBalance().add(BigDecimal.valueOf(100)));
-        return customerMapper.toEntity(restTemplate.postForObject(REQUEST_UPDATE, customerMapper.toDatabaseDTO(customer), CustomerDatabaseDto.class));
-    }
 }

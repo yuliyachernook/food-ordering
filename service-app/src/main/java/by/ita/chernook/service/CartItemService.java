@@ -25,9 +25,9 @@ public class CartItemService {
     private static final String REQUEST_CREATE = "/cart/item/create";
     private static final String REQUEST_UPDATE = "/cart/item/update";
     private static final String REQUEST_READ = "/cart/item/read/?uuid=%s";
-    private static final String REQUEST_DELETE = "/cart/item/delete?uuid=%s";
     private static final String REQUEST_READ_ALL_BY_CART_UUID = "/cart/item/read/all/cart/%s";
     private static final String REQUEST_READ_BY_CART_UUID_AND_PRODUCT_UUID = "/cart/item/read/cart/%s/product/%s";
+    private static final String REQUEST_DELETE = "/cart/item/delete?uuid=%s";
     private static final String REQUEST_DELETE_ALL_BY_CART_UUID = "/cart/item/delete/all/cart/%s";
 
     private final RestTemplate restTemplate;
@@ -35,7 +35,6 @@ public class CartItemService {
     private final ProductService productService;
     private final CartItemMapper cartItemMapper;
     private final CartService cartService;
-
 
     public CartItem createCartItem(UUID cartUuid, UUID productUuid, int quantity) {
         Cart cart = cartService.findCartById(cartUuid);
@@ -59,10 +58,6 @@ public class CartItemService {
         return cartItemMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_READ, cartItem.getUuid()), CartItemDatabaseDto.class));
     }
 
-    public void deleteCartItem(UUID cartItemUuid) {
-        restTemplate.delete(String.format(REQUEST_DELETE, cartItemUuid));
-    }
-
     public List<CartItem> findAllCartItemsByCustomerUuid(UUID customerUuid) {
         Customer customer = customerService.findCustomerById(customerUuid);
         UUID cartUuid = customer.getCart().getUuid();
@@ -77,6 +72,10 @@ public class CartItemService {
         return response.getBody().stream()
                 .map(cartItemMapper::toEntity)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteCartItem(UUID cartItemUuid) {
+        restTemplate.delete(String.format(REQUEST_DELETE, cartItemUuid));
     }
 
     public void deleteAllCartItemsByCartUuid(UUID cartUuid) {

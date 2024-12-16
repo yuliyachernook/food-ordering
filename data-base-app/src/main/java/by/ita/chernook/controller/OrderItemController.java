@@ -21,15 +21,13 @@ public class OrderItemController {
 
     @PostMapping("/create")
     public OrderItemDto create(@RequestBody OrderItemDto orderDto) {
-        OrderItem orderItem = orderItemMapper.toEntity(orderDto);
-        OrderItem insertedOrderItem = orderItemService.insertOrderItem(orderItem);
+        OrderItem insertedOrderItem = orderItemService.insertOrderItem(orderItemMapper.toEntity(orderDto));
         return orderItemMapper.toDTO(insertedOrderItem);
     }
 
     @PutMapping("/update")
     public OrderItemDto update(@RequestBody OrderItemDto userDto) {
-        OrderItem orderItem = orderItemMapper.toEntity(userDto);
-        OrderItem updatedOrderItem = orderItemService.updateOrderItem(orderItem);
+        OrderItem updatedOrderItem = orderItemService.updateOrderItem(orderItemMapper.toEntity(userDto));
         return orderItemMapper.toDTO(updatedOrderItem);
     }
 

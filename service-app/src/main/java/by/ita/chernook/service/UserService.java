@@ -13,8 +13,14 @@ public class UserService {
 
     private static final String REQUEST_CREATE = "/user/create";
     private static final String REQUEST_READ = "/user/read/login/%s";
+
     private final RestTemplate restTemplate;
     private final UserMapper userMapper;
+
+    public User createUser(User user) {
+        UserDatabaseDto userDatabaseDto = userMapper.toDatabaseDTO(user);
+        return userMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, userDatabaseDto, UserDatabaseDto.class));
+    }
 
     public User findUserByLogin(String login) {
         try {
@@ -22,10 +28,5 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public User createUser(User user) {
-        UserDatabaseDto userDatabaseDto = userMapper.toDatabaseDTO(user);
-        return userMapper.toEntity(restTemplate.postForObject(REQUEST_CREATE, userDatabaseDto, UserDatabaseDto.class));
     }
 }

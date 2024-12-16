@@ -2,7 +2,6 @@ package by.ita.chernook.controller;
 
 import by.ita.chernook.dto.to_web.OrderWebDto;
 import by.ita.chernook.mapper.OrderMapper;
-import by.ita.chernook.mapper.ProductMapper;
 import by.ita.chernook.model.Order;
 import by.ita.chernook.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -32,10 +31,10 @@ public class OrderController {
         return orderMapper.toWebDTO(updatedOrder);
     }
 
-    @PostMapping("/build")
-    public OrderWebDto build(@RequestParam UUID customerUuid) {
-        Order insertedOrder = orderService.buildOrderFromCart(customerUuid);
-        return orderMapper.toWebDTO(insertedOrder);
+    @PostMapping("/prepare")
+    public OrderWebDto prepare(@RequestParam UUID customerUuid) {
+        Order order = orderService.prepareOrderFromCustomerCart(customerUuid);
+        return orderMapper.toWebDTO(order);
     }
 
     @GetMapping("/read")

@@ -1,10 +1,8 @@
 package by.ita.chernook.controller;
 
 import by.ita.chernook.dto.to_web.CouponWebDto;
-import by.ita.chernook.dto.to_web.ProductWebDto;
 import by.ita.chernook.mapper.CouponMapper;
 import by.ita.chernook.model.Coupon;
-import by.ita.chernook.model.Product;
 import by.ita.chernook.service.CouponService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +21,7 @@ public class CouponController {
 
     @PostMapping("/create")
     public CouponWebDto create(@RequestBody CouponWebDto couponWebDto) {
-        Coupon coupon = couponMapper.toEntity(couponWebDto);
-        Coupon insertedCoupon = couponService.createCoupon(coupon);
+        Coupon insertedCoupon = couponService.createCoupon(couponMapper.toEntity(couponWebDto));
         return couponMapper.toWebDTO(insertedCoupon);
     }
 
@@ -34,16 +31,16 @@ public class CouponController {
         return couponMapper.toWebDTO(updatedCoupon);
     }
 
-    @GetMapping("/read")
-    public CouponWebDto read(@RequestParam UUID uuid) {
-        Coupon coupon = couponService.findCouponById(uuid);
-        return couponMapper.toWebDTO(coupon);
-    }
-
     @PostMapping("/apply")
     public CouponWebDto apply(@RequestParam String coupon) {
         Coupon updatedCoupon = couponService.applyCoupon(coupon);
         return couponMapper.toWebDTO(updatedCoupon);
+    }
+
+    @GetMapping("/read")
+    public CouponWebDto read(@RequestParam UUID uuid) {
+        Coupon coupon = couponService.findCouponById(uuid);
+        return couponMapper.toWebDTO(coupon);
     }
 
     @GetMapping("/read/code")
@@ -54,7 +51,7 @@ public class CouponController {
 
     @GetMapping("/read/all")
     public List<CouponWebDto> readAll() {
-        return couponService.findAllGlobalCoupons()
+        return couponService.findAllCoupons()
                 .stream()
                 .map(couponMapper::toWebDTO)
                 .collect(Collectors.toList());

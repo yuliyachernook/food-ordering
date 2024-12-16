@@ -37,5 +37,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus;
     private String comment;
+    @Column(updatable = false)
     private ZonedDateTime creationDateTime;
 }

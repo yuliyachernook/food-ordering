@@ -1,6 +1,5 @@
 package by.ita.chernook.controller;
 
-import by.ita.chernook.dto.ProductDto;
 import by.ita.chernook.dto.UserDto;
 import by.ita.chernook.mapper.UserMapper;
 import by.ita.chernook.model.User;
@@ -22,15 +21,13 @@ public class UserController {
 
     @PostMapping("/create")
     public UserDto create(@RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User insertedUser = userService.insertUser(user);
+        User insertedUser = userService.insertUser(userMapper.toEntity(userDto));
         return userMapper.toDTO(insertedUser);
     }
 
     @PutMapping("/update")
     public UserDto update(@RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User updatedUser = userService.updateUser(user);
+        User updatedUser = userService.updateUser(userMapper.toEntity(userDto));
         return userMapper.toDTO(updatedUser);
     }
 

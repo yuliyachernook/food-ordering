@@ -109,7 +109,7 @@
         <td><span th:text="${order.formattedCreationDateTime}"></span></td>
         <td><span th:text="${order.totalPrice}"></span></td>
         <td><span th:text="${order.comment}"></span></td>
-        <td><span th:text="${order.orderStatus}"></span></td>
+        <td><span th:text="${order.orderStatus.name}"></span></td>
         <td><a th:href="@{/admin/orders/update(uuid=${order.uuid})}" class="btn btn-primary">Подробнее</a></td>
     </tr>
     </tbody>
