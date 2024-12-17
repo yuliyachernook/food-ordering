@@ -25,6 +25,8 @@ public class CartController {
     public String showCartPage(HttpSession session, Model model) {
         List<CartItem> cartItems = cartService.readAllCartItemsByCartUuid(mainService.getCartUuidFromSession(session));
         model.addAttribute("cartItems", cartItems);
+        session.removeAttribute("discountedTotalPrice");
+        session.removeAttribute("coupon");
         return "cart";
     }
 

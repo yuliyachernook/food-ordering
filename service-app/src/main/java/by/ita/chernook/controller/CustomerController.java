@@ -66,7 +66,7 @@ public class CustomerController {
         return customerMapper.toWebDTO(customer);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/address")
     public void deleteAddress(@RequestParam UUID uuid) {
         customerService.deleteAddress(uuid);
     }

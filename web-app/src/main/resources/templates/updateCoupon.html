@@ -59,6 +59,20 @@
             max-height: 200px;
             margin-bottom: 10px;
         }
+        .back-button {
+            background-color: #6492b4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #567f9f;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -94,10 +108,12 @@
             <label for="available-uses">Количество использований:</label>
             <input type="number" id="available-uses" name="availableUses" th:field="${coupon.availableUses}" required>
         </div>
-        <button type="submit">Редактировать</button>
+        <div class="form-group">
+            <button type="submit">Редактировать</button>
+        </div>
     </form>
     <div class="form-group">
-        <a th:href="@{/admin/coupons}">Назад к списку купонов</a>
+        <a th:href="@{/admin/coupons/}">Назад к списку купонов</a>
     </div>
 </div>
 </body>

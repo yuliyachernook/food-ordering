@@ -12,8 +12,6 @@ public class RestConfig {
     @Value("${database.api.base-url}")
     private String baseUrl;
 
-    private static final String DATA_BASE_APP_URL = "http://nginx/database";
-
     @Bean
     public RestTemplate dataBaseAppClient() {
         return new RestTemplateBuilder()

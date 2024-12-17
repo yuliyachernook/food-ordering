@@ -1,2 +1,6 @@
 server:
   port: 8091
+
+service:
+  api:
+    base-url: http://nginx/business

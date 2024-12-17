@@ -41,7 +41,7 @@
             box-sizing: border-box;
         }
         button {
-            background-color: #007BFF;
+            background-color: #6492b4;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -52,18 +52,7 @@
             width: 100%;
         }
         button:hover {
-            background-color: #0056b3;
-        }
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #007BFF;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        a:hover {
-            color: #0056b3;
+            background-color: #567f9f;
         }
         .order-item {
             border: 1px solid #ddd;
@@ -74,6 +63,20 @@
         }
         .order-item h4 {
             margin: 0 0 10px 0;
+        }
+        .back-button {
+            background-color: #6492b4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #567f9f;
+            color: white;
         }
     </style>
 </head>
@@ -97,14 +100,20 @@
         </div>
         <div class="form-group">
             <label for="totalPrice">Общая цена:</label>
-            <input type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" required>
+            <input disabled type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="totalPrice">Адрес доставки:</label>
+            <span th:with="address=${order.deliveryAddress.city} + ', ' + ${order.deliveryAddress.street} + ', ' + ${order.deliveryAddress.house} + (order.deliveryAddress.apartment != null ? ', кв. ' + ${order.deliveryAddress.apartment} : '')"
+                  th:text="${address}"></span>
         </div>
 
         <h2>Товары в заказе</h2>
         <div th:each="item : ${order.orderItems}" class="order-item">
             <h4 th:text="${item.product.itemName}"></h4>
             <p><strong>Количество:</strong> <span th:text="${item.quantity}"></span></p>
-            <p><strong>Цена (1 шт.):</strong> <span th:text="${item.price}"></span></p>
+            <p><strong>Цена (1 шт.):</strong> <span th:text="${item.price} + ' руб.'"></span></p>
         </div>
 
         <div class="form-group">
@@ -112,7 +121,7 @@
         </div>
     </form>
     <div class="form-group">
-        <a th:href="@{/admin/orders}">Назад к списку заказов</a>
+        <a  th:href="@{/admin/orders/}">Назад к списку заказов</a>
     </div>
 </div>
 </body>

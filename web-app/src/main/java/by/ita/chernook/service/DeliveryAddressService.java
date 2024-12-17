@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class DeliveryAddressService {
 
-    private static final String REQUEST_DELETE = "/delivery/address/delete?uuid=%s";
+    private static final String REQUEST_DELETE = "/customer/delete/address?uuid=%s";
 
     private final RestTemplate restTemplate;
 

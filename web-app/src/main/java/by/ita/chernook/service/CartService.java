@@ -29,8 +29,6 @@ public class CartService {
     private static final String REQUEST_CART_CREATE = "/cart/create";
     private static final String REQUEST_DELETE_ALL_CART_ITEMS_BY_CART_UUID = "/cart/item/delete/all/cart/%s";
 
-
-
     private final RestTemplate restTemplate;
     private final CartItemMapper cartItemMapper;
     private final CartMapper cartMapper;

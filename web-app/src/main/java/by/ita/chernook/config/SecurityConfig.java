@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/cart").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-              //  .anyRequest().authenticated() // все остальные запросы требуют аутентификации
+                .antMatchers("/customer/**").hasAuthority("CUSTOMER")
+                //.anyRequest().authenticated() // все остальные запросы требуют аутентификации
             .and()
             .formLogin() // настройка формы входа
                 .loginPage("/login")
@@ -63,7 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             if (tempCartUuid != null) {
                                 cartService.transfer(cartUuid, tempCartUuid);
                             }
-
+                            request.getSession().removeAttribute("discountedTotalPrice");
+                            request.getSession().removeAttribute("coupon");
                             request.getSession().setAttribute("cart", cartUuid);
                             response.sendRedirect("/");
 

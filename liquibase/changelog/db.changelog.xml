@@ -211,7 +211,7 @@
     <changeSet id="19" author="yuliya">
         <insert tableName="users">
             <column name="uuid" value="f272b4ca-fe19-4d62-b38a-4633f7047edd"/>
-            <column name="login" value="333"/>
+            <column name="login" value="admin"/>
             <column name="password" value="$2a$10$QKe8CUsdBr.RNHD3sXYXlOJrke.B.uTLhcX5Nk/pTzzkCZpD/.IoK"/>
             <column name="user_role_enum" value="ADMIN"/>
         </insert>
