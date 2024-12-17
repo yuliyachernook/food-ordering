@@ -16,15 +16,30 @@ public abstract class TestUtils {
     protected static final String REQUEST_CART_ITEM_CREATE = "/cart/item/create";
     protected static final String REQUEST_CART_ITEM_UPDATE = "/cart/item/update";
     protected static final String REQUEST_CART_ITEM_READ = "/cart/item/read/?uuid=%s";
-    protected static final String REQUEST_CART_ITEM_READ_ALL_BY_CART_UUID = "/cart/item/read/all/cart/%s";
     protected static final String REQUEST_CART_ITEM_READ_BY_CART_UUID_AND_PRODUCT_UUID = "/cart/item/read/cart/%s/product/%s";
     protected static final String REQUEST_CART_ITEM_DELETE = "/cart/item/delete?uuid=%s";
-    protected static final String REQUEST_CART_ITEM_DELETE_ALL_BY_CART_UUID = "/cart/item/delete/all/cart/%s";
 
     protected static final String REQUEST_CART_CREATE = "/cart/create";
     protected static final String REQUEST_CART_READ = "/cart/read?uuid=%s";
     protected static final String REQUEST_CART_DELETE = "/cart/delete?uuid=%s";
 
+    protected static final String REQUEST_COUPON_CREATE = "/coupon/create";
+    protected static final String REQUEST_COUPON_READ = "/coupon/read?uuid=%s";
+    protected static final String REQUEST_COUPON_DELETE = "/coupon/delete?uuid=%s";
+    protected static final String REQUEST_COUPON_READ_BY_CODE = "/coupon/read/code?code=%s";
+
+    protected static final String REQUEST_USER_CREATE = "/user/create";
+    protected static final String REQUEST_USER_READ = "/user/read/login/%s";
+
+    protected static final String REQUEST_PRODUCT_CREATE = "/product/create";
+    protected static final String REQUEST_PRODUCT_READ = "/product/read?uuid=%s";
+    protected static final String REQUEST_PRODUCT_DELETE = "/product/delete?uuid=%s";
+
+    protected static final String REQUEST_CUSTOMER_CREATE = "/customer/create";
+    protected static final String REQUEST_CUSTOMER_READ = "/customer/read?uuid=%s";
+
+    protected static final String REQUEST_ORDER_CREATE = "/order/create";
+    protected static final String REQUEST_ORDER_READ = "/order/read?uuid=%s";
 
     protected User buildUser(UUID uuid, String login, String password, UserRoleEnum userRole, ZonedDateTime creationDateTime) {
         return User.builder()

@@ -2,18 +2,14 @@ package by.ita.chernook;
 
 import by.ita.chernook.dto.to_data_base.CartDatabaseDto;
 import by.ita.chernook.dto.to_data_base.CartItemDatabaseDto;
-import by.ita.chernook.dto.to_data_base.CustomerDatabaseDto;
 import by.ita.chernook.dto.to_data_base.ProductDatabaseDto;
 import by.ita.chernook.mapper.CartItemMapper;
 import by.ita.chernook.mapper.CartMapper;
-import by.ita.chernook.mapper.ProductMapper;
 import by.ita.chernook.model.Cart;
 import by.ita.chernook.model.CartItem;
-import by.ita.chernook.model.Customer;
 import by.ita.chernook.model.Product;
 import by.ita.chernook.service.CartItemService;
 import by.ita.chernook.service.CartService;
-import by.ita.chernook.service.CustomerService;
 import by.ita.chernook.service.ProductService;
 import by.ita.chernook.util.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -32,67 +28,48 @@ import static org.mockito.Mockito.*;
 public class CartServiceTest extends TestUtils {
 
     @Mock
-    private CartItemMapper cartItemMapper;
+    private CartMapper cartMapper;
     @Mock
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private CartItemService cartItemService;
-    @Mock
     private CartService cartService;
-    @Mock
-    private ProductService productService;
 
     @Test
-    void createCart_then_return_insertedCartItem() {
+    void createCart_then_return_insertedCart() {
         Cart testCart = Cart.builder().uuid(UUID.randomUUID()).build();
-
-        when(cartService.findCartById(testCart.getUuid())).thenReturn(testCart);
-        when(productService.findProductById(testProduct.getUuid())).thenReturn(testProduct);
-        when(cartItemMapper.toEntity(restTemplate.postForObject(REQUEST_CART_ITEM_CREATE, cartItemMapper.toDatabaseDTO(testCartItem), CartItemDatabaseDto.class)))
-                .thenReturn(testCartItem);
-
-        CartItem actualCartItem = cartItemService.createCartItem(testCart.getUuid(), testProduct.getUuid(), 1);
-
-        assertEquals(testCartItem, actualCartItem);
-
-        verify(cartService, times(1)).findCartById(testCart.getUuid());
-        verify(productService, times(1)).findProductById(testProduct.getUuid());
-        verify(cartItemMapper, times(1)).toEntity(restTemplate.postForObject(REQUEST_CART_ITEM_CREATE,
-                cartItemMapper.toDatabaseDTO(testCartItem), CartItemDatabaseDto.class));
-    }
-
-    @Test
-    void updateCartItem_then_return_updatedCartItem() {
-        Cart testCart = Cart.builder().uuid(UUID.randomUUID()).build();
-        Product testProduct = Product.builder().uuid(UUID.randomUUID()).itemName("Test").build();
-        CartItem testCartItem = CartItem.builder().uuid(UUID.randomUUID()).cart(testCart).product(testProduct).quantity(1).build();
         CartDatabaseDto testCartDatabaseDto = CartDatabaseDto.builder().uuid(UUID.randomUUID()).build();
-        ProductDatabaseDto testProductDatabaseDto = ProductDatabaseDto.builder().uuid(UUID.randomUUID()).itemName("Test").build();
-        CartItemDatabaseDto testCartItemDatabaseDto = CartItemDatabaseDto.builder().uuid(UUID.randomUUID()).cart(testCartDatabaseDto).product(testProductDatabaseDto).quantity(1).build();
-        String url = String.format(REQUEST_CART_ITEM_READ_BY_CART_UUID_AND_PRODUCT_UUID, testCart.getUuid(), testProduct.getUuid());
 
-        when(restTemplate.getForObject(eq(url), eq(CartItemDatabaseDto.class))).thenReturn(testCartItemDatabaseDto);
-        when(cartItemMapper.toEntity(testCartItemDatabaseDto)).thenReturn(testCartItem);
-        when(restTemplate.getForObject(eq(String.format(REQUEST_CART_ITEM_READ, testCartItem.getUuid())), eq(CartItemDatabaseDto.class)))
-                .thenReturn(testCartItemDatabaseDto);
+        when(cartMapper.toDatabaseDTO(testCart)).thenReturn(testCartDatabaseDto);
+        when(cartMapper.toEntity(restTemplate.postForObject(REQUEST_CART_CREATE, testCartDatabaseDto, CartDatabaseDto.class))).thenReturn(testCart);
 
-        CartItem actualCartItem = cartItemService.updateCartItem(testCart.getUuid(), testProduct.getUuid(), 2);
+        Cart actualCart = cartService.createCart(testCart);
 
-        assertEquals(testCartItem.getUuid(), actualCartItem.getUuid());
-        assertEquals(2, actualCartItem.getQuantity());
+        assertEquals(testCart, actualCart);
 
-        verify(restTemplate, times(1)).getForObject(url, CartItemDatabaseDto.class);
-        verify(cartItemMapper, times(2)).toEntity(testCartItemDatabaseDto);
-        verify(restTemplate, times(1)).put(REQUEST_CART_ITEM_UPDATE, cartItemMapper.toDatabaseDTO(testCartItem), CartItemDatabaseDto.class);
-        verify(restTemplate, times(1)).getForObject(String.format(REQUEST_CART_ITEM_READ, testCartItem.getUuid()), CartItemDatabaseDto.class);
+        verify(cartMapper, times(1)).toDatabaseDTO(testCart);
+        verify(cartMapper, times(1)).toEntity(restTemplate.postForObject(REQUEST_CART_CREATE, testCartDatabaseDto, CartDatabaseDto.class));
     }
 
     @Test
-    void deleteCartItem() {
-        UUID uuid = UUID.randomUUID();
-        cartItemService.deleteCartItem(uuid);
+    void updateCart_then_return_updatedCart() {
+        Cart testCart = Cart.builder().uuid(UUID.randomUUID()).build();
 
-        verify(restTemplate, times(1)).delete(String.format(REQUEST_CART_ITEM_DELETE, uuid));
+        when(cartMapper.toEntity(restTemplate.getForObject(String.format(REQUEST_CART_READ, testCart.getUuid()), CartDatabaseDto.class)))
+                .thenReturn(testCart);
+
+        Cart actualCart = cartService.findCartById(testCart.getUuid());
+
+        assertEquals(testCart, actualCart);
+
+        verify(cartMapper, times(1)).toEntity(restTemplate.getForObject(String.format(REQUEST_CART_READ, testCart.getUuid()), CartDatabaseDto.class));
+    }
+
+    @Test
+    void deleteCart() {
+        UUID uuid = UUID.randomUUID();
+        cartService.deleteCart(uuid);
+
+        verify(restTemplate, times(1)).delete(String.format(REQUEST_CART_DELETE, uuid));
     }
 }

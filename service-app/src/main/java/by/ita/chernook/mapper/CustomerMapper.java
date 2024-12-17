@@ -1,6 +1,7 @@
 package by.ita.chernook.mapper;
 
 import by.ita.chernook.dto.to_data_base.CustomerDatabaseDto;
+import by.ita.chernook.dto.to_data_base.UserDatabaseDto;
 import by.ita.chernook.dto.to_web.CustomerWebDto;
 import by.ita.chernook.model.Customer;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class CustomerMapper {
 
     private final DeliveryAddressMapper deliveryAddressMapper;
     private final CartMapper cartMapper;
+    private final UserMapper userMapper;
 
     public CustomerDatabaseDto toDatabaseDTO(Customer customer) {
         return CustomerDatabaseDto.builder()
@@ -24,7 +26,7 @@ public class CustomerMapper {
                 .phoneNumber(customer.getPhoneNumber())
                 .email(customer.getEmail())
                 .balance(customer.getBalance())
-                .user(customer.getUser() != null ? customer.getUser() : null)
+                .user(customer.getUser() != null ? userMapper.toDatabaseDTO(customer.getUser()) : null)
                 .deliveryAddresses(customer.getDeliveryAddresses() != null ?
                         customer.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toDatabaseDTO)
@@ -41,7 +43,7 @@ public class CustomerMapper {
                 .phoneNumber(customer.getPhoneNumber())
                 .email(customer.getEmail())
                 .balance(customer.getBalance())
-                .user(customer.getUser() != null ? customer.getUser() : null)
+                .user(customer.getUser() != null ? userMapper.toWebDTO(customer.getUser()) : null)
                 .deliveryAddresses(customer.getDeliveryAddresses() != null ?
                         customer.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toWebDTO)
@@ -58,7 +60,7 @@ public class CustomerMapper {
                 .phoneNumber(customerDatabaseDto.getPhoneNumber())
                 .email(customerDatabaseDto.getEmail())
                 .balance(customerDatabaseDto.getBalance())
-                .user(customerDatabaseDto.getUser() != null ? customerDatabaseDto.getUser() : null)
+                .user(customerDatabaseDto.getUser() != null ? userMapper.toEntity(customerDatabaseDto.getUser()) : null)
                 .deliveryAddresses(customerDatabaseDto.getDeliveryAddresses() != null ?
                         customerDatabaseDto.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toEntity)
@@ -75,7 +77,7 @@ public class CustomerMapper {
                 .phoneNumber(customerWebDto.getPhoneNumber())
                 .email(customerWebDto.getEmail())
                 .balance(customerWebDto.getBalance())
-                .user(customerWebDto.getUser() != null ? customerWebDto.getUser() : null)
+                .user(customerWebDto.getUser() != null ? userMapper.toEntity(customerWebDto.getUser()) : null)
                 .deliveryAddresses(customerWebDto.getDeliveryAddresses() != null ?
                         customerWebDto.getDeliveryAddresses().stream()
                                 .map(deliveryAddressMapper::toEntity)

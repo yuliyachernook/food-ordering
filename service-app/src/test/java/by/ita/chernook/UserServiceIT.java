@@ -1,9 +1,6 @@
 package by.ita.chernook;
 
 import by.ita.chernook.dto.enums.UserRoleEnum;
-import by.ita.chernook.model.Cart;
-import by.ita.chernook.model.CartItem;
-import by.ita.chernook.model.Product;
 import by.ita.chernook.model.User;
 import by.ita.chernook.service.*;
 import by.ita.chernook.util.TestUtils;
@@ -39,7 +36,8 @@ public class UserServiceIT extends TestUtils {
 
     @Test
     public void createUser_then_returnCorrect() {
-        User expectedUser = buildUser(UUID.randomUUID(), "l", "p", UserRoleEnum.CUSTOMER, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
+        String login = String.valueOf(System.currentTimeMillis());
+        User expectedUser = buildUser(UUID.randomUUID(), login, "password", UserRoleEnum.CUSTOMER, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
 
         User actualUser = userService.createUser(expectedUser);
 
@@ -51,8 +49,8 @@ public class UserServiceIT extends TestUtils {
 
     @Test
     public void findUserByLogin_then_returnCorrect() {
-        String login = "l1";
-        User user = buildUser(UUID.randomUUID(), "l1", "p", UserRoleEnum.CUSTOMER, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
+        String login = String.valueOf(System.currentTimeMillis());
+        User user = buildUser(UUID.randomUUID(), login, "password", UserRoleEnum.CUSTOMER, ZonedDateTime.parse("2024-09-09T00:28:39.294+03:00"));
         User createdUser = userService.createUser(user);
 
         User actualUser = userService.findUserByLogin(login);

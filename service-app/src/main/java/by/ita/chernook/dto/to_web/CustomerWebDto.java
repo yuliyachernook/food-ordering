@@ -1,6 +1,5 @@
 package by.ita.chernook.dto.to_web;
 
-import by.ita.chernook.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,7 @@ public class CustomerWebDto {
     private String email;
     private BigDecimal balance;
 
-    private User user;
+    private UserWebDto user;
     private List<DeliveryAddressWebDto> deliveryAddresses;
     private List<OrderWebDto> orders = new ArrayList<>();
     private CartWebDto cart;

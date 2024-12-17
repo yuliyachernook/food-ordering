@@ -25,7 +25,7 @@ public class CustomerDatabaseDto {
     private String email;
     private BigDecimal balance;
 
-    private User user;
+    private UserDatabaseDto user;
     private List<DeliveryAddressDatabaseDto> deliveryAddresses;
     private List<OrderDatabaseDto> orders = new ArrayList<>();
     private CartDatabaseDto cart;
